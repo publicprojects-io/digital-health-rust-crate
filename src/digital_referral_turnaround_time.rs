@@ -111,6 +111,7 @@
 /// let elapsed = elapsed_days(10.0, 11.8);
 /// assert!((elapsed - 1.8).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn elapsed_days(submission_day: f64, decision_day: f64) -> f64 {
     decision_day - submission_day
 }
@@ -135,6 +136,7 @@ pub fn elapsed_days(submission_day: f64, decision_day: f64) -> f64 {
 /// let days = hours_to_days(4.0);
 /// assert!((days - (4.0 / 24.0)).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn hours_to_days(hours: f64) -> f64 {
     hours / 24.0
 }
@@ -167,16 +169,35 @@ pub fn hours_to_days(hours: f64) -> f64 {
 /// assert_eq!(percentile(&durations, 90.0), Some(6.0));
 /// assert!(percentile(&[], 50.0).is_none());
 /// ```
+///
+/// # Casts
+///
+/// `durations` is expected to hold at most a few years' worth of individual
+/// referrals, so its length and the rank derived from it stay far below
+/// `2^52`; the `f64 ↔ usize` conversions below cannot lose precision or sign
+/// in practice.
+#[must_use]
+#[allow(
+    clippy::cast_precision_loss,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss
+)]
 pub fn percentile(durations: &[f64], p: f64) -> Option<f64> {
     if durations.is_empty() {
         return None;
     }
     let mut sorted = durations.to_vec();
-    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    // `total_cmp` gives a total order over all f64 values (including NaN),
+    // so this can't panic the way `partial_cmp().unwrap()` would on NaN input.
+    sorted.sort_by(f64::total_cmp);
+
+    // `rank` is a fractional index into `sorted`: e.g. p=50 on 10 elements
+    // lands at rank 4.5, halfway between the 5th and 6th order statistics.
     let rank = (p / 100.0).clamp(0.0, 1.0) * (sorted.len() - 1) as f64;
     let lo = rank.floor() as usize;
     let hi = rank.ceil() as usize;
     let frac = rank - lo as f64;
+    // Linear interpolation between the two bracketing order statistics.
     Some(sorted[lo] + (sorted[hi] - sorted[lo]) * frac)
 }
 

@@ -116,6 +116,7 @@
 ///
 /// assert!(telehealth_visit_rate(0.0, 0.0).is_none());
 /// ```
+#[must_use]
 pub fn telehealth_visit_rate(telehealth_encounters: f64, in_person_encounters: f64) -> Option<f64> {
     let total = telehealth_encounters + in_person_encounters;
     if total == 0.0 {
@@ -146,6 +147,7 @@ pub fn telehealth_visit_rate(telehealth_encounters: f64, in_person_encounters: f
 /// let rate = video_rate(1_600.0, 4_000.0).unwrap();
 /// assert!((rate - 40.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn video_rate(video_encounters: f64, total_encounters: f64) -> Option<f64> {
     if total_encounters == 0.0 {
         None
@@ -175,6 +177,7 @@ pub fn video_rate(video_encounters: f64, total_encounters: f64) -> Option<f64> {
 /// let rate = telephone_rate(1_200.0, 4_000.0).unwrap();
 /// assert!((rate - 30.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn telephone_rate(telephone_encounters: f64, total_encounters: f64) -> Option<f64> {
     if total_encounters == 0.0 {
         None

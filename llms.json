@@ -1,0 +1,159 @@
+{
+  "name": "digital-health",
+  "version": "0.1.0",
+  "description": "Digital health metrics models, structs, calculations, and examples.",
+  "language": "rust",
+  "edition": "2024",
+  "dependencies": [],
+  "repository": "https://github.com/publicprojects-io/digital-health-rust-crate/",
+  "license": "MIT OR Apache-2.0 OR BSD-3-Clause OR GPL-2.0-only OR GPL-3.0-only",
+  "upstream_source": "https://github.com/digital-health-metrics/digital-health-metrics",
+  "conventions": {
+    "numeric_type": "f64",
+    "fallible_return": "Option<f64>, None iff a denominator argument is 0.0",
+    "panics": "none of the public functions panic"
+  },
+  "modules": [
+    {
+      "name": "patient_portal_adoption_rate",
+      "path": "src/patient_portal_adoption_rate.rs",
+      "spec": "spec/patient-portal-adoption-rate.md",
+      "summary": "Registration, activation, and active-use rates for a patient portal, as a three-stage funnel.",
+      "functions": [
+        {
+          "name": "registration_rate",
+          "signature": "fn registration_rate(registered: f64, eligible: f64) -> Option<f64>",
+          "formula": "registered / eligible * 100",
+          "returns_none_when": "eligible == 0.0",
+          "example": { "input": [32000.0, 50000.0], "output": 64.0 }
+        },
+        {
+          "name": "activation_rate",
+          "signature": "fn activation_rate(activated: f64, registered: f64) -> Option<f64>",
+          "formula": "activated / registered * 100",
+          "returns_none_when": "registered == 0.0",
+          "example": { "input": [27000.0, 32000.0], "output": 84.375 }
+        },
+        {
+          "name": "active_use_rate",
+          "signature": "fn active_use_rate(active_in_window: f64, eligible: f64) -> Option<f64>",
+          "formula": "active_in_window / eligible * 100",
+          "returns_none_when": "eligible == 0.0",
+          "example": { "input": [21000.0, 50000.0], "output": 42.0 }
+        }
+      ]
+    },
+    {
+      "name": "telehealth_visit_rate",
+      "path": "src/telehealth_visit_rate.rs",
+      "spec": "spec/telehealth-visit-rate.md",
+      "summary": "Share of completed encounters delivered remotely, overall and split by video vs. telephone.",
+      "functions": [
+        {
+          "name": "telehealth_visit_rate",
+          "signature": "fn telehealth_visit_rate(telehealth_encounters: f64, in_person_encounters: f64) -> Option<f64>",
+          "formula": "telehealth_encounters / (telehealth_encounters + in_person_encounters) * 100",
+          "returns_none_when": "telehealth_encounters + in_person_encounters == 0.0",
+          "example": { "input": [2800.0, 1200.0], "output": 70.0 }
+        },
+        {
+          "name": "video_rate",
+          "signature": "fn video_rate(video_encounters: f64, total_encounters: f64) -> Option<f64>",
+          "formula": "video_encounters / total_encounters * 100",
+          "returns_none_when": "total_encounters == 0.0",
+          "example": { "input": [1600.0, 4000.0], "output": 40.0 }
+        },
+        {
+          "name": "telephone_rate",
+          "signature": "fn telephone_rate(telephone_encounters: f64, total_encounters: f64) -> Option<f64>",
+          "formula": "telephone_encounters / total_encounters * 100",
+          "returns_none_when": "total_encounters == 0.0",
+          "example": { "input": [1200.0, 4000.0], "output": 30.0 }
+        }
+      ]
+    },
+    {
+      "name": "appointment_no_show_rate",
+      "path": "src/appointment_no_show_rate.rs",
+      "spec": "spec/appointment-no-show-rate.md",
+      "summary": "True no-show rate, late-cancellation rate, and their combined non-attendance rate.",
+      "functions": [
+        {
+          "name": "no_show_rate",
+          "signature": "fn no_show_rate(no_shows: f64, total_scheduled: f64) -> Option<f64>",
+          "formula": "no_shows / total_scheduled * 100",
+          "returns_none_when": "total_scheduled == 0.0",
+          "example": { "input": [180.0, 2000.0], "output": 9.0 }
+        },
+        {
+          "name": "late_cancellation_rate",
+          "signature": "fn late_cancellation_rate(late_cancellations: f64, total_scheduled: f64) -> Option<f64>",
+          "formula": "late_cancellations / total_scheduled * 100",
+          "returns_none_when": "total_scheduled == 0.0",
+          "example": { "input": [60.0, 2000.0], "output": 3.0 }
+        },
+        {
+          "name": "combined_non_attendance_rate",
+          "signature": "fn combined_non_attendance_rate(no_shows: f64, late_cancellations: f64, total_scheduled: f64) -> Option<f64>",
+          "formula": "(no_shows + late_cancellations) / total_scheduled * 100",
+          "returns_none_when": "total_scheduled == 0.0",
+          "example": { "input": [180.0, 60.0, 2000.0], "output": 12.0 }
+        }
+      ]
+    },
+    {
+      "name": "clinical_alert_override_rate",
+      "path": "src/clinical_alert_override_rate.rs",
+      "spec": "spec/clinical-alert-override-rate.md",
+      "summary": "Share of clinical decision support alerts overridden, and the share of overrides that carry a documented reason.",
+      "functions": [
+        {
+          "name": "override_rate",
+          "signature": "fn override_rate(overridden: f64, total_fired: f64) -> Option<f64>",
+          "formula": "overridden / total_fired * 100",
+          "returns_none_when": "total_fired == 0.0",
+          "example": { "input": [8700.0, 10000.0], "output": 87.0 }
+        },
+        {
+          "name": "documented_override_rate",
+          "signature": "fn documented_override_rate(documented: f64, overridden: f64) -> Option<f64>",
+          "formula": "documented / overridden * 100",
+          "returns_none_when": "overridden == 0.0",
+          "example": { "input": [340.0, 500.0], "output": 68.0 }
+        }
+      ]
+    },
+    {
+      "name": "digital_referral_turnaround_time",
+      "path": "src/digital_referral_turnaround_time.rs",
+      "spec": "spec/digital-referral-turnaround-time.md",
+      "summary": "Elapsed time from e-referral submission to triage decision, unit conversion, and percentile statistics over a set of durations.",
+      "functions": [
+        {
+          "name": "elapsed_days",
+          "signature": "fn elapsed_days(submission_day: f64, decision_day: f64) -> f64",
+          "formula": "decision_day - submission_day",
+          "returns_none_when": null,
+          "example": { "input": [10.0, 11.8], "output": 1.8 }
+        },
+        {
+          "name": "hours_to_days",
+          "signature": "fn hours_to_days(hours: f64) -> f64",
+          "formula": "hours / 24.0",
+          "returns_none_when": null,
+          "example": { "input": [4.0], "output": 0.16666666666666666 }
+        },
+        {
+          "name": "percentile",
+          "signature": "fn percentile(durations: &[f64], p: f64) -> Option<f64>",
+          "formula": "linear interpolation between order statistics at rank (p / 100).clamp(0, 1) * (durations.len() - 1), after sorting with f64::total_cmp",
+          "returns_none_when": "durations.is_empty()",
+          "example": {
+            "input": [[0.3, 0.5, 0.8, 1.2, 1.8, 1.8, 2.5, 3.5, 6.0, 6.0], 50.0],
+            "output": 1.8
+          }
+        }
+      ]
+    }
+  ]
+}

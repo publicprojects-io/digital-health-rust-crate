@@ -12,9 +12,9 @@ authors:
     orcid: 'https://orcid.org/0009-0000-4681-282X'
 identifiers:
   - type: url
-    value: 'https://github.com/healthprojects/digital-health-rust-crate/'
+    value: 'https://github.com/publicprojects-io/digital-health-rust-crate/'
     description: "Digital Health: Rust crate of digital health metrics models, structs, functions, calculations, and more"
-repository-code: 'https://github.com/healthprojects/digital-health-rust-crate/'
+repository-code: 'https://github.com/publicprojects-io/digital-health-rust-crate/'
 abstract: >-
   Digital Health: Rust crate of digital health metrics models, structs, functions, calculations, and more
 license: See license file

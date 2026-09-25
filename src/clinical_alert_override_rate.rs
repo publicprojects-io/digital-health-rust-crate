@@ -125,6 +125,7 @@
 ///
 /// assert!(override_rate(1.0, 0.0).is_none());
 /// ```
+#[must_use]
 pub fn override_rate(overridden: f64, total_fired: f64) -> Option<f64> {
     if total_fired == 0.0 {
         None
@@ -157,6 +158,7 @@ pub fn override_rate(overridden: f64, total_fired: f64) -> Option<f64> {
 /// let rate = documented_override_rate(340.0, 500.0).unwrap();
 /// assert!((rate - 68.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn documented_override_rate(documented: f64, overridden: f64) -> Option<f64> {
     if overridden == 0.0 {
         None

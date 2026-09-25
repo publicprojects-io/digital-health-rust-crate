@@ -3,7 +3,7 @@
 //! Patient portal adoption rate measures the share of eligible patients who
 //! have registered for, and actively use, an online patient portal (for
 //! example NHS App, Patient Access, or an EHR-tethered portal such as
-//! MyChart) to view records, book appointments, or message their care team.
+//! `MyChart`) to view records, book appointments, or message their care team.
 //! It is the entry-level indicator of digital engagement: a patient who has
 //! never activated an account cannot benefit from any downstream digital
 //! service built on the portal.
@@ -121,6 +121,7 @@
 /// let rate = registration_rate(32_000.0, 50_000.0).unwrap();
 /// assert!((rate - 64.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn registration_rate(registered: f64, eligible: f64) -> Option<f64> {
     if eligible == 0.0 {
         None
@@ -152,6 +153,7 @@ pub fn registration_rate(registered: f64, eligible: f64) -> Option<f64> {
 /// let rate = activation_rate(27_000.0, 32_000.0).unwrap();
 /// assert!((rate - 84.375).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn activation_rate(activated: f64, registered: f64) -> Option<f64> {
     if registered == 0.0 {
         None
@@ -186,6 +188,7 @@ pub fn activation_rate(activated: f64, registered: f64) -> Option<f64> {
 /// let rate = active_use_rate(21_000.0, 50_000.0).unwrap();
 /// assert!((rate - 42.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn active_use_rate(active_in_window: f64, eligible: f64) -> Option<f64> {
     if eligible == 0.0 {
         None

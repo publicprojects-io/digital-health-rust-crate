@@ -45,7 +45,9 @@ assert!((rate - 9.0).abs() < 1e-9);
 
 Each module's rustdoc explains its topic — what the metric is, how it's
 calculated, why it matters, and a worked example that runs as a doctest.
-Start with `cargo doc --open`.
+Start with `cargo doc --open`, or with
+[`docs/tutorials/getting-started.md`](docs/tutorials/getting-started.md) for
+a narrated walkthrough of two worked examples.
 
 New here? Start with `patient_portal_adoption_rate` and
 `appointment_no_show_rate` — two metrics that show up in almost every
@@ -76,7 +78,24 @@ doc example compiles and asserts under `cargo test --doc`:
 
 ```sh
 cargo test
+cargo clippy --all-targets --all-features  # denies clippy::pedantic
+cargo doc --no-deps                        # denies missing_docs
 ```
+
+## For contributors and AI agents
+
+- [`spec/`](spec/README.md) — the single-source calculation contract
+  (formula, signature, `None` condition) for every function, independent of
+  the narrative rustdoc.
+- [`AGENTS.md`](AGENTS.md) — build/test/lint commands, the spec-driven
+  change workflow, and conventions for modifying this crate.
+- [`CLAUDE.md`](CLAUDE.md) — Claude Code-specific supplement to `AGENTS.md`.
+- [`digital-health-skill/SKILL.md`](digital-health-skill/SKILL.md) — how an
+  AI agent should pick a function and interpret its `Option<f64>` result.
+- [`llms.txt`](llms.txt) / [`llms.json`](llms.json) — prose and structured
+  machine-readable summaries of the crate for LLM tooling.
+- [`docs/tutorials/`](docs/tutorials/) — a getting-started walkthrough and a
+  guide to adding a new metric module.
 
 ## Citation
 
@@ -91,6 +110,7 @@ option — or contact us for custom license options. See
 ## Tracking
 
 - Package: [digital-health](https://crates.io/crates/digital-health)
-- Repository: [github.com/joelparkerhenderson/digital-health-rust-crate](https://github.com/joelparkerhenderson/digital-health-rust-crate)
-- Source of truth: [digital-health-metrics](https://github.com/digital-health-metrics/digital-health-metrics)
+- Repository: [github.com/publicprojects-io/digital-health-rust-crate](https://github.com/publicprojects-io/digital-health-rust-crate)
+- Source of truth for metric definitions: [digital-health-metrics](https://github.com/digital-health-metrics/digital-health-metrics)
+- Source of truth for this crate's calculation contracts: [`spec/`](spec/README.md)
 - Author: [Joel Parker Henderson](https://joelparkerhenderson.com) — joel@joelparkerhenderson.com

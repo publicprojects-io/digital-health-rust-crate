@@ -108,6 +108,7 @@
 ///
 /// assert!(no_show_rate(180.0, 0.0).is_none());
 /// ```
+#[must_use]
 pub fn no_show_rate(no_shows: f64, total_scheduled: f64) -> Option<f64> {
     if total_scheduled == 0.0 {
         None
@@ -138,6 +139,7 @@ pub fn no_show_rate(no_shows: f64, total_scheduled: f64) -> Option<f64> {
 /// let rate = late_cancellation_rate(60.0, 2_000.0).unwrap();
 /// assert!((rate - 3.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn late_cancellation_rate(late_cancellations: f64, total_scheduled: f64) -> Option<f64> {
     if total_scheduled == 0.0 {
         None
@@ -173,6 +175,7 @@ pub fn late_cancellation_rate(late_cancellations: f64, total_scheduled: f64) -> 
 /// let rate = combined_non_attendance_rate(180.0, 60.0, 2_000.0).unwrap();
 /// assert!((rate - 12.0).abs() < 1e-9);
 /// ```
+#[must_use]
 pub fn combined_non_attendance_rate(
     no_shows: f64,
     late_cancellations: f64,

@@ -1,0 +1,46 @@
+# Digital Health
+
+> Rust crate of pure calculation functions for digital health KPIs —
+> patient engagement/access and digital care operations/safety. `std`-only,
+> zero dependencies, `f64` in and out, `Option<f64>` wherever a denominator
+> can be zero.
+
+One module per metric topic, each mirroring a topic in the upstream
+[Digital Health
+Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
+project: what the metric is, how it's calculated, why it matters, a worked
+example that runs as a doctest, data sources and caveats, common pitfalls,
+and further reading.
+
+## Docs
+
+- [Crate root](src/lib.rs): module index and a quickstart doctest
+- [Specification contracts](spec/README.md): formula, signature, and `None`
+  condition for every function — the single source of truth for "what it
+  computes"
+- [README](README.md): install, quickstart, module index, testing
+- [Skill](digital-health-skill/SKILL.md): how an AI agent should pick a
+  function and read `Option<f64>` results in this crate
+
+## Modules
+
+- [Patient portal adoption rate](src/patient_portal_adoption_rate.rs):
+  `registration_rate`, `activation_rate`, `active_use_rate` — three-stage
+  funnel over `f64` counts, each `Option<f64>`
+- [Telehealth visit rate](src/telehealth_visit_rate.rs):
+  `telehealth_visit_rate`, `video_rate`, `telephone_rate`
+- [Appointment no-show rate](src/appointment_no_show_rate.rs):
+  `no_show_rate`, `late_cancellation_rate`, `combined_non_attendance_rate`
+- [Clinical alert override rate](src/clinical_alert_override_rate.rs):
+  `override_rate`, `documented_override_rate`
+- [Digital referral turnaround time](src/digital_referral_turnaround_time.rs):
+  `elapsed_days`, `hours_to_days`, `percentile`
+
+## Optional
+
+- [llms.json](llms.json): the same module/function list as structured JSON,
+  with formulas and worked-example input/output pairs
+- [AGENTS.md](AGENTS.md): build/test/lint commands and conventions for an
+  agent modifying this crate
+- [Tutorials](docs/tutorials/): a getting-started walkthrough and a guide to
+  adding a new metric module
