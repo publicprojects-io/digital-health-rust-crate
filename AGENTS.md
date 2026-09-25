@@ -6,13 +6,18 @@ Instructions for any AI coding agent working in this repository. See
 ## What this crate is
 
 `digital-health` is a Rust crate of pure calculation functions for digital
-health KPIs — patient portal adoption, telehealth visit rate, appointment
-no-show rate, clinical alert override rate, digital referral turnaround
-time. One module per metric topic in `src/`, each mirroring a topic in the
-upstream [Digital Health
+health KPIs — eight modules under `src/`, one per metric topic. Five mirror
+a topic in the upstream [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-project (see `Topic doc:` at the end of each module's rustdoc, and each
-metric's `Upstream topic:` line under [`spec/`](spec/README.md)).
+project directly (`patient_portal_adoption_rate`, `telehealth_visit_rate`,
+`appointment_no_show_rate`, `clinical_alert_override_rate`,
+`digital_referral_turnaround_time`; each ends its rustdoc with a `Topic
+doc:` line to the upstream source). Three more cover well-evidenced metrics
+not yet in that project (`remote_patient_monitoring_adherence_rate`,
+`secure_messaging_response_time`, `e_prescribing_transmission_accuracy`;
+each ends with an `Independent topic:` line pointing back at its own `##
+Sources` section instead). Every module's `spec/` file states which kind it
+is on its `Upstream topic:` line.
 
 The crate is `std`-only with **zero external dependencies**, by design — do
 not add a dependency without asking first.
@@ -51,32 +56,40 @@ touches only the module's rustdoc and doesn't require touching `spec/`.
 ## Adding a new metric module
 
 1. Add `spec/<topic-name>.md` (kebab-case), following the format of an
-   existing spec file: `Module`, `Status`, `Upstream topic`, then a
-   `## Contract` section per function with formula, `None` condition, and at
-   least one worked example.
+   existing spec file: `Module`, `Status`, `Upstream topic` (the upstream
+   path if the topic exists in digital-health-metrics, or `none —
+   independent topic` pointing at the module's own `## Sources` if it
+   doesn't), then a `## Contract` section per function with formula, `None`
+   condition, and at least one worked example.
 2. Add `src/<topic_name>.rs` (snake_case), following the shape every
    existing module uses:
    - Module-level rustdoc (`//!`) with `# <Title>`, `## How it's
      calculated`, `## Why it matters`, `## Worked example` (as a runnable
      doctest), `## Data sources and caveats`, `## Pitfalls`, `## Sources`,
-     and a trailing `Topic doc:` line pointing at the upstream path.
+     and a trailing `Topic doc:` line (upstream topics) or `Independent
+     topic:` line pointing back at `## Sources` (topics that aren't upstream).
    - Each `pub fn` takes and returns `f64`, uses `Option<f64>` if any
      argument is a denominator that can be zero, carries `#[must_use]`, and
      has rustdoc with `# Arguments`, `# Returns`, and a doctest under `#
-     Examples` that reproduces the module's worked example.
+     Examples` that reproduces the module's worked example. A
+     percentile-style function delegates to `crate::internal::percentile`
+     rather than reimplementing the interpolation.
    - A `#[cfg(test)] mod tests` block with one test per worked-example
      value (comment the test with the doc line it reproduces) and one
-     `zero_denominator_returns_none` test.
+     `zero_denominator_returns_none` (or `empty_..._returns_none`) test.
 3. Add `pub mod <topic_name>;` to `src/lib.rs`, and an entry in its `##
    Module index` doc section under the correct theme heading.
-4. Update `README.md`'s module list, `llms.txt`, `llms.json`, and
-   `digital-health-skill/SKILL.md` to include the new module.
+4. Update `spec/README.md`'s table, `README.md`'s module list and module
+   count, `llms.txt`, `llms.json` (including its `upstream_topic` field),
+   and `digital-health-skill/SKILL.md` to include the new module.
 
 ## Code conventions
 
 - No panics in any public function. Prefer a total order (`f64::total_cmp`)
   over `partial_cmp().unwrap()` when sorting floats, so NaN input can't
-  panic — see `digital_referral_turnaround_time::percentile`.
+  panic — see the shared `internal::percentile` helper, used by both
+  `digital_referral_turnaround_time::percentile` and
+  `secure_messaging_response_time::percentile`.
 - No input validation beyond the zero-denominator check. This crate does not
   verify that a numerator is non-negative or `<=` its denominator; it trusts
   the caller's counts. Do not add that validation without discussing it

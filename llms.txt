@@ -5,12 +5,14 @@
 > zero dependencies, `f64` in and out, `Option<f64>` wherever a denominator
 > can be zero.
 
-One module per metric topic, each mirroring a topic in the upstream
-[Digital Health
+One module per metric topic. Five mirror a topic in the upstream [Digital
+Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-project: what the metric is, how it's calculated, why it matters, a worked
-example that runs as a doctest, data sources and caveats, common pitfalls,
-and further reading.
+project directly; three more cover well-evidenced metrics not yet in that
+project, sourced independently. Every module has the same shape: what the
+metric is, how it's calculated, why it matters, a worked example that runs
+as a doctest, data sources and caveats, common pitfalls, and further
+reading.
 
 ## Docs
 
@@ -31,10 +33,16 @@ and further reading.
   `telehealth_visit_rate`, `video_rate`, `telephone_rate`
 - [Appointment no-show rate](src/appointment_no_show_rate.rs):
   `no_show_rate`, `late_cancellation_rate`, `combined_non_attendance_rate`
+- [Remote patient monitoring adherence rate](src/remote_patient_monitoring_adherence_rate.rs):
+  `monitoring_adherence_rate`, `billing_threshold_met_rate`
 - [Clinical alert override rate](src/clinical_alert_override_rate.rs):
   `override_rate`, `documented_override_rate`
 - [Digital referral turnaround time](src/digital_referral_turnaround_time.rs):
   `elapsed_days`, `hours_to_days`, `percentile`
+- [Secure messaging response time](src/secure_messaging_response_time.rs):
+  `response_hours`, `percentile`
+- [E-prescribing transmission accuracy](src/e_prescribing_transmission_accuracy.rs):
+  `first_pass_transmission_rate`, `pharmacy_callback_rate`
 
 ## Optional
 

@@ -35,6 +35,13 @@
 //!
 //! ## Module index
 //!
+//! Five modules mirror a topic in [Digital Health
+//! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
+//! directly (each ends its rustdoc with a `Topic doc:` line to the upstream
+//! source); three more cover well-evidenced metrics not yet in that project
+//! (each ends with an `Independent topic:` line instead, and cites its own
+//! sources).
+//!
 //! ### Patient engagement and access
 //!
 //! - [`patient_portal_adoption_rate`] — registration, activation, and active
@@ -43,6 +50,9 @@
 //!   why video and telephone should never be reported as one number
 //! - [`appointment_no_show_rate`] — the oldest operational metric in
 //!   healthcare, and one of the best-evidenced targets for digital reminders
+//! - [`remote_patient_monitoring_adherence_rate`] — the metric that decides
+//!   whether a monitoring period is even billable, not just how engaged a
+//!   patient is
 //!
 //! ### Digital care operations and safety
 //!
@@ -50,6 +60,10 @@
 //!   fatigue in clinical decision support
 //! - [`digital_referral_turnaround_time`] — the process metric that shows
 //!   whether an e-referral system is actually saving time
+//! - [`secure_messaging_response_time`] — patient-portal in-basket response
+//!   time, a well-documented driver of clinician burnout
+//! - [`e_prescribing_transmission_accuracy`] — the pharmacy call-back rate
+//!   that catches errors a clean network transmission can't
 //!
 //! ## Testing
 //!
@@ -59,5 +73,9 @@
 pub mod appointment_no_show_rate;
 pub mod clinical_alert_override_rate;
 pub mod digital_referral_turnaround_time;
+pub mod e_prescribing_transmission_accuracy;
+mod internal;
 pub mod patient_portal_adoption_rate;
+pub mod remote_patient_monitoring_adherence_rate;
+pub mod secure_messaging_response_time;
 pub mod telehealth_visit_rate;

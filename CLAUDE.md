@@ -29,8 +29,9 @@ or write code against one of this crate's metrics.
 ## AI-discovery files to keep in sync
 
 If you add, remove, or rename a public function or module, update all of:
-`src/lib.rs` (module index doc), `README.md`, `llms.txt`, `llms.json`,
-`digital-health-skill/SKILL.md`. These are redundant with each other by
+`src/lib.rs` (module index doc), `spec/README.md` (file table), `README.md`,
+`llms.txt`, `llms.json`, `digital-health-skill/SKILL.md`. These are
+redundant with each other by
 design — different consumers (a human reading GitHub, an LLM crawling
 `llms.txt`, an agent loading the skill) read different ones, so accuracy
 matters in each independently rather than in just one canonical place.

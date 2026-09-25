@@ -24,11 +24,17 @@ picking the right function and interpreting its result.
 | True no-show rate | `no_show_rate` | `appointment_no_show_rate` |
 | Late-cancellation rate | `late_cancellation_rate` | `appointment_no_show_rate` |
 | No-shows and late cancellations combined | `combined_non_attendance_rate` | `appointment_no_show_rate` |
+| Share of monitoring days with a qualifying reading | `monitoring_adherence_rate` | `remote_patient_monitoring_adherence_rate` |
+| Share of a cohort meeting the RPM billing-day threshold | `billing_threshold_met_rate` | `remote_patient_monitoring_adherence_rate` |
 | Share of CDS alerts overridden | `override_rate` | `clinical_alert_override_rate` |
 | Share of overrides with a documented reason | `documented_override_rate` | `clinical_alert_override_rate` |
 | Time from referral submission to triage decision | `elapsed_days` | `digital_referral_turnaround_time` |
 | Converting an hours figure to days for comparison | `hours_to_days` | `digital_referral_turnaround_time` |
 | Median or Nth-percentile turnaround time over many referrals | `percentile` | `digital_referral_turnaround_time` |
+| Time from a patient portal message to a clinician's reply | `response_hours` | `secure_messaging_response_time` |
+| Median or Nth-percentile message response time | `percentile` | `secure_messaging_response_time` |
+| Share of e-prescriptions filled with no pharmacy call-back | `first_pass_transmission_rate` | `e_prescribing_transmission_accuracy` |
+| Share of e-prescriptions that generated a pharmacy call-back | `pharmacy_callback_rate` | `e_prescribing_transmission_accuracy` |
 
 ## Reading the result
 
@@ -59,9 +65,20 @@ match no_show_rate(180.0, 2_000.0) {
 - `clinical_alert_override_rate::override_rate` should usually be called
   once per severity tier or alert type, not once with a single blended
   total — a blended figure conflates well-justified and unsafe overrides.
+- `e_prescribing_transmission_accuracy`'s `first_pass_transmission_rate` and
+  `pharmacy_callback_rate` only sum to 100% when every transmission is
+  classified into exactly one of those two buckets; don't assume that if
+  the caller's data has other outcome categories.
 - This crate does not validate that a numerator is non-negative or `<=` its
   denominator; it trusts the caller's counts. Validate upstream if the data
   source might not guarantee that.
+- Three of the crate's eight modules —
+  `remote_patient_monitoring_adherence_rate`,
+  `secure_messaging_response_time`, `e_prescribing_transmission_accuracy` —
+  are not present in [Digital Health
+  Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
+  and are sourced independently from general literature and standards
+  instead; each module's rustdoc `## Sources` section says exactly what.
 
 ## Further reading
 

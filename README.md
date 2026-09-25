@@ -1,9 +1,11 @@
 # Digital Health Rust crate
 
-Digital health metrics models, structs, calculations, and examples — 5
+Digital health metrics models, structs, calculations, and examples — 8
 modules covering patient engagement and access, and digital care operations
-and safety. One module per topic, following [Digital Health
-Metrics](https://github.com/digital-health-metrics/digital-health-metrics).
+and safety. One module per topic. Five modules follow [Digital Health
+Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
+directly; three more cover well-evidenced metrics not yet in that project,
+sourced independently (see each module's rustdoc `Sources` section).
 
 The crate is `std`-only with **zero external dependencies**. All quantities
 are `f64`, and functions return `Option<f64>` wherever a denominator can be
@@ -63,6 +65,9 @@ digital health business case.
   video and telephone should never be reported as one number
 - `appointment_no_show_rate` — the oldest operational metric in healthcare,
   and one of the best-evidenced targets for digital reminders
+- `remote_patient_monitoring_adherence_rate` — the metric that decides
+  whether a monitoring period is even billable, not just how engaged a
+  patient is
 
 ### Digital care operations and safety
 
@@ -70,6 +75,10 @@ digital health business case.
   clinical decision support
 - `digital_referral_turnaround_time` — the process metric that shows whether
   an e-referral system is actually saving time
+- `secure_messaging_response_time` — patient-portal in-basket response time,
+  a well-documented driver of clinician burnout
+- `e_prescribing_transmission_accuracy` — the pharmacy call-back rate that
+  catches errors a clean network transmission can't
 
 ## Testing
 
