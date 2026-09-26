@@ -18,6 +18,7 @@
       "numeric_type": "u32 counts in, rusty_money::Money<'_, T: FormattableCurrency> in and out",
       "fallible_return": "Result<Money, rusty_money::MoneyError> — Err on currency mismatch or overflow, never on a zero count",
       "panics": "none of the public functions panic",
+      "default_illustrative_currency": "USD — a documentation convention only; functions are generic over any FormattableCurrency and accept a Money value in any currency the caller constructs",
       "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue"]
     }
   },

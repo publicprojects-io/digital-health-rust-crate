@@ -82,3 +82,10 @@ the exception to "everything is `f64`": they take counts as `u32` and a
   exchange rate — those are always caller-supplied `Money` arguments. See
   each module's `## Data sources and caveats` for why (reimbursement rates
   change annually and vary by payer and locality).
+- **USD is the default illustrative currency.** Every worked example,
+  doctest, and unit test in a money-based module uses `iso::USD` unless it
+  is specifically demonstrating `MoneyError::CurrencyMismatch` (where a
+  second currency, e.g. `iso::EUR`, is required to trigger the error). This
+  is a documentation convention only — the functions themselves are generic
+  over `T: FormattableCurrency` and work with any ISO currency (or a custom
+  one) a caller constructs a `Money` value in.

@@ -27,7 +27,12 @@ modules (`no_show_lost_revenue`, `remote_patient_monitoring_billing_revenue`)
 instead take `u32` counts and a
 [`rusty_money::Money`](https://docs.rs/rusty-money) amount, returning
 `Result<Money, rusty_money::MoneyError>` — see
-[`spec/README.md`](spec/README.md)'s "Money convention". `rusty-money` is
+[`spec/README.md`](spec/README.md)'s "Money convention", including its "USD
+is the default illustrative currency" rule: every worked example, doctest,
+and unit test in a money-based module uses `iso::USD` unless it's
+specifically demonstrating a currency-mismatch error. The functions
+themselves stay generic over `T: FormattableCurrency` — this is a
+documentation convention, not an API restriction to USD. `rusty-money` is
 this crate's only dependency; adding a further one still needs to be raised
 with the user first, it isn't now open-ended just because the first one was
 approved.
