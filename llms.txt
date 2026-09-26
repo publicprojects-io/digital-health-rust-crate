@@ -1,14 +1,16 @@
 # Digital Health
 
 > Rust crate of pure calculation functions for digital health KPIs —
-> patient engagement/access and digital care operations/safety. `std`-only,
-> zero dependencies, `f64` in and out, `Option<f64>` wherever a denominator
-> can be zero.
+> patient engagement/access, digital care operations/safety, and cost and
+> revenue. Rate modules are `std`-only: `f64` in and out, `Option<f64>`
+> wherever a denominator can be zero. Two cost/revenue modules depend on
+> `rusty-money`: `u32` counts and a `Money` amount in, `Result<Money,
+> MoneyError>` out.
 
 One module per metric topic. Five mirror a topic in the upstream [Digital
 Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-project directly; three more cover well-evidenced metrics not yet in that
+project directly; five more cover well-evidenced metrics not yet in that
 project, sourced independently. Every module has the same shape: what the
 metric is, how it's calculated, why it matters, a worked example that runs
 as a doctest, data sources and caveats, common pitfalls, and further
@@ -17,12 +19,13 @@ reading.
 ## Docs
 
 - [Crate root](src/lib.rs): module index and a quickstart doctest
-- [Specification contracts](spec/README.md): formula, signature, and `None`
-  condition for every function — the single source of truth for "what it
-  computes"
+- [Specification contracts](spec/README.md): formula, signature, and
+  `None`/`Err` condition for every function — the single source of truth
+  for "what it computes"
 - [README](README.md): install, quickstart, module index, testing
 - [Skill](digital-health-skill/SKILL.md): how an AI agent should pick a
-  function and read `Option<f64>` results in this crate
+  function and read an `Option<f64>` or `Result<Money, MoneyError>` result
+  in this crate
 
 ## Modules
 
@@ -43,6 +46,10 @@ reading.
   `response_hours`, `percentile`
 - [E-prescribing transmission accuracy](src/e_prescribing_transmission_accuracy.rs):
   `first_pass_transmission_rate`, `pharmacy_callback_rate`
+- [No-show lost revenue](src/no_show_lost_revenue.rs) (`Money`, not `f64`):
+  `lost_revenue`, `net_revenue_impact`
+- [Remote patient monitoring billing revenue](src/remote_patient_monitoring_billing_revenue.rs)
+  (`Money`, not `f64`): `billable_revenue`, `revenue_at_risk`
 
 ## Optional
 

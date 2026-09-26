@@ -1,17 +1,25 @@
 {
   "name": "digital-health",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Digital health metrics models, structs, calculations, and examples.",
   "language": "rust",
   "edition": "2024",
-  "dependencies": [],
+  "dependencies": ["rusty-money"],
   "repository": "https://github.com/publicprojects-io/digital-health-rust-crate/",
   "license": "MIT OR Apache-2.0 OR BSD-3-Clause OR GPL-2.0-only OR GPL-3.0-only",
   "upstream_source": "https://github.com/digital-health-metrics/digital-health-metrics",
   "conventions": {
-    "numeric_type": "f64",
-    "fallible_return": "Option<f64>, None iff a denominator argument is 0.0",
-    "panics": "none of the public functions panic"
+    "rate_modules": {
+      "numeric_type": "f64",
+      "fallible_return": "Option<f64>, None iff a denominator argument is 0.0",
+      "panics": "none of the public functions panic"
+    },
+    "money_modules": {
+      "numeric_type": "u32 counts in, rusty_money::Money<'_, T: FormattableCurrency> in and out",
+      "fallible_return": "Result<Money, rusty_money::MoneyError> — Err on currency mismatch or overflow, never on a zero count",
+      "panics": "none of the public functions panic",
+      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue"]
+    }
   },
   "modules": [
     {
@@ -229,6 +237,69 @@
           "formula": "callbacks / total_transmissions * 100",
           "returns_none_when": "total_transmissions == 0.0",
           "example": { "input": [150.0, 5000.0], "output": 3.0 }
+        }
+      ]
+    },
+    {
+      "name": "no_show_lost_revenue",
+      "path": "src/no_show_lost_revenue.rs",
+      "spec": "spec/no-show-lost-revenue.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount of revenue lost to appointment no-shows, and the net revenue impact against gross scheduled revenue.",
+      "functions": [
+        {
+          "name": "lost_revenue",
+          "signature": "fn lost_revenue<T: FormattableCurrency>(no_shows: u32, revenue_per_appointment: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "formula": "revenue_per_appointment * no_shows",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow); never on currency mismatch, since no_shows is a plain count",
+          "example": {
+            "input": { "no_shows": 180, "revenue_per_appointment": { "major_units": 150, "currency": "USD" } },
+            "output": { "major_units": 27000, "currency": "USD" }
+          }
+        },
+        {
+          "name": "net_revenue_impact",
+          "signature": "fn net_revenue_impact<T: FormattableCurrency>(gross_scheduled_revenue: Money<'_, T>, lost_revenue: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "formula": "gross_scheduled_revenue - lost_revenue",
+          "returns_err_when": "the two arguments are denominated in different currencies (MoneyError::CurrencyMismatch)",
+          "example": {
+            "input": {
+              "gross_scheduled_revenue": { "major_units": 300000, "currency": "USD" },
+              "lost_revenue": { "major_units": 27000, "currency": "USD" }
+            },
+            "output": { "major_units": 273000, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "remote_patient_monitoring_billing_revenue",
+      "path": "src/remote_patient_monitoring_billing_revenue.rs",
+      "spec": "spec/remote-patient-monitoring-billing-revenue.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount billable for a remote patient monitoring cohort's billing-eligible patients, and the revenue at risk from non-eligible patients.",
+      "functions": [
+        {
+          "name": "billable_revenue",
+          "signature": "fn billable_revenue<T: FormattableCurrency>(billing_eligible_patients: u32, reimbursement_per_patient: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "formula": "reimbursement_per_patient * billing_eligible_patients",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "billing_eligible_patients": 280, "reimbursement_per_patient": { "major_units": 50, "currency": "USD" } },
+            "output": { "major_units": 14000, "currency": "USD" }
+          }
+        },
+        {
+          "name": "revenue_at_risk",
+          "signature": "fn revenue_at_risk<T: FormattableCurrency>(non_eligible_patients: u32, reimbursement_per_patient: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "formula": "reimbursement_per_patient * non_eligible_patients",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "non_eligible_patients": 120, "reimbursement_per_patient": { "major_units": 50, "currency": "USD" } },
+            "output": { "major_units": 6000, "currency": "USD" }
+          }
         }
       ]
     }

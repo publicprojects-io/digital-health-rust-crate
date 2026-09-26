@@ -22,9 +22,9 @@ or write code against one of this crate's metrics.
    `cargo doc --no-deps`. All three must be clean (`[lints]` in
    `Cargo.toml` denies pedantic clippy and missing docs, so a warning is a
    failure here, not a suggestion).
-4. If a formula, signature, or `None` condition changed, confirm `spec/`,
-   the rustdoc, and the tests all agree with each other and with the
-   worked-example numbers in `llms.json`.
+4. If a formula, signature, or `None`/`Err` condition changed, confirm
+   `spec/`, the rustdoc, and the tests all agree with each other and with
+   the worked-example numbers in `llms.json`.
 
 ## AI-discovery files to keep in sync
 

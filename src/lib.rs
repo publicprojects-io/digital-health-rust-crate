@@ -2,12 +2,17 @@
 //!
 //! Rust implementations of the metrics from [Digital Health
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-//! — one module per topic, covering patient engagement, access, and digital
-//! care operations and safety.
+//! — one module per topic, covering patient engagement and access, digital
+//! care operations and safety, and cost and revenue.
 //!
-//! The crate is `std`-only with **zero external dependencies**. All
-//! quantities are `f64`, and functions return `Option<f64>` wherever a
-//! denominator can be zero.
+//! Most modules are rate calculations: `f64` in, `Option<f64>` out (`None`
+//! wherever a denominator can be zero), with no dependencies beyond `std`.
+//! The cost-and-revenue modules instead take counts and a
+//! [`rusty_money::Money`] amount, and return
+//! `Result<Money, rusty_money::MoneyError>` — money arithmetic uses
+//! [`rusty_money`](https://docs.rs/rusty-money) rather than `f64`, so that a
+//! currency mismatch or overflow is a typed error instead of a silent
+//! rounding bug.
 //!
 //! ## Quickstart
 //!
@@ -38,7 +43,7 @@
 //! Five modules mirror a topic in [Digital Health
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 //! directly (each ends its rustdoc with a `Topic doc:` line to the upstream
-//! source); three more cover well-evidenced metrics not yet in that project
+//! source); five more cover well-evidenced metrics not yet in that project
 //! (each ends with an `Independent topic:` line instead, and cites its own
 //! sources).
 //!
@@ -65,6 +70,15 @@
 //! - [`e_prescribing_transmission_accuracy`] — the pharmacy call-back rate
 //!   that catches errors a clean network transmission can't
 //!
+//! ### Cost and revenue
+//!
+//! - [`no_show_lost_revenue`] — the currency amount behind
+//!   [`appointment_no_show_rate`], for the business case a reminders
+//!   programme is justified against
+//! - [`remote_patient_monitoring_billing_revenue`] — the currency amount
+//!   behind [`remote_patient_monitoring_adherence_rate`]'s cohort
+//!   billing-eligible rate
+//!
 //! ## Testing
 //!
 //! Every module reproduces its topic's worked example in unit tests, and
@@ -75,7 +89,9 @@ pub mod clinical_alert_override_rate;
 pub mod digital_referral_turnaround_time;
 pub mod e_prescribing_transmission_accuracy;
 mod internal;
+pub mod no_show_lost_revenue;
 pub mod patient_portal_adoption_rate;
 pub mod remote_patient_monitoring_adherence_rate;
+pub mod remote_patient_monitoring_billing_revenue;
 pub mod secure_messaging_response_time;
 pub mod telehealth_visit_rate;

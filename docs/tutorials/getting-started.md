@@ -2,14 +2,15 @@
 
 This walks through using `digital-health` end to end: installing it,
 running the portal-adoption funnel and no-show rate from the crate's own
-quickstart, then a second worked example — the digital-referral
-turnaround-time percentiles — that the quickstart doesn't cover.
+quickstart, a second worked example — the digital-referral
+turnaround-time percentiles — that the quickstart doesn't cover, and a
+third showing the crate's `Money`-based cost-and-revenue functions.
 
 ## Install
 
 ```toml
 [dependencies]
-digital-health = "0.1"
+digital-health = "0.2"
 ```
 
 ## The portal-adoption funnel and the no-show rate
@@ -67,6 +68,38 @@ assert!(fast_pathway_days < median);
 `percentile` never panics — even on an empty slice (it returns `None`) or on
 `NaN` input (it sorts with a total order). See
 [`spec/digital-referral-turnaround-time.md`](../../spec/digital-referral-turnaround-time.md).
+
+## A third example: putting a currency amount on a rate
+
+Every module so far takes and returns `f64`. The two cost-and-revenue
+modules instead take `u32` counts and a
+[`rusty_money::Money`](https://docs.rs/rusty-money) amount, returning
+`Result<Money, MoneyError>` — continuing the no-show example above, at an
+illustrative $150.00 per completed appointment:
+
+```rust
+use rusty_money::{Money, iso};
+use digital_health::no_show_lost_revenue::{lost_revenue, net_revenue_impact};
+
+let revenue_per_appointment = Money::from_major(150, iso::USD);
+
+// 180 no-shows × $150.00 = $27,000.00.
+let lost = lost_revenue(180, revenue_per_appointment).unwrap();
+assert_eq!(lost, Money::from_major(27_000, iso::USD));
+
+// Had all 2,000 appointments completed, gross revenue would have been
+// $300,000.00; net of the no-shows, it's $273,000.00.
+let gross_scheduled = Money::from_major(300_000, iso::USD);
+let net = net_revenue_impact(gross_scheduled, lost).unwrap();
+assert_eq!(net, Money::from_major(273_000, iso::USD));
+```
+
+`u32` counts convert to `rusty_money`'s decimal type exactly — there's no
+`f64`-to-decimal precision-loss question to worry about. Mixing currencies
+(e.g. subtracting a EUR amount from a USD one) returns `Err`, never a wrong
+answer or a panic. See
+[`spec/no-show-lost-revenue.md`](../../spec/no-show-lost-revenue.md) and
+`spec/README.md`'s "Money convention" section.
 
 ## Next steps
 
