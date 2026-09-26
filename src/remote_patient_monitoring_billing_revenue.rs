@@ -89,7 +89,7 @@
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 //! project at the time this module was written.
 
-use rusty_money::{FormattableCurrency, Money, MoneyError};
+use rusty_money::{Money, MoneyError, iso};
 
 /// The billable revenue: patients who met the period's billing-day
 /// threshold, multiplied by the reimbursement for one patient.
@@ -117,10 +117,10 @@ use rusty_money::{FormattableCurrency, Money, MoneyError};
 /// let billable = billable_revenue(280, reimbursement_per_patient).unwrap();
 /// assert_eq!(billable, Money::from_major(14_000, iso::USD));
 /// ```
-pub fn billable_revenue<T: FormattableCurrency>(
+pub fn billable_revenue(
     billing_eligible_patients: u32,
-    reimbursement_per_patient: Money<'_, T>,
-) -> Result<Money<'_, T>, MoneyError> {
+    reimbursement_per_patient: Money<'static, iso::Currency>,
+) -> Result<Money<'static, iso::Currency>, MoneyError> {
     reimbursement_per_patient.mul(billing_eligible_patients)
 }
 
@@ -150,17 +150,16 @@ pub fn billable_revenue<T: FormattableCurrency>(
 /// let at_risk = revenue_at_risk(120, reimbursement_per_patient).unwrap();
 /// assert_eq!(at_risk, Money::from_major(6_000, iso::USD));
 /// ```
-pub fn revenue_at_risk<T: FormattableCurrency>(
+pub fn revenue_at_risk(
     non_eligible_patients: u32,
-    reimbursement_per_patient: Money<'_, T>,
-) -> Result<Money<'_, T>, MoneyError> {
+    reimbursement_per_patient: Money<'static, iso::Currency>,
+) -> Result<Money<'static, iso::Currency>, MoneyError> {
     reimbursement_per_patient.mul(non_eligible_patients)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rusty_money::iso;
 
     // Doc line: "280 × $50.00 = $14,000.00 billable this period."
     #[test]

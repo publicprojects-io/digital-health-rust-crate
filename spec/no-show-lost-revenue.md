@@ -13,17 +13,19 @@ file's contract differs from an `f64`-based one.
 
 ## Contract
 
-### `lost_revenue<T: FormattableCurrency>(no_shows: u32, revenue_per_appointment: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>`
+### `lost_revenue(no_shows: u32, revenue_per_appointment: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>`
 
-- Formula: `revenue_per_appointment * no_shows` (via `Money::mul`)
+- Formula: `revenue_per_appointment * no_shows` (via `Money::mul`, called
+  directly — this function is a one-line pass-through, not a wrapper type)
 - Returns `Err(MoneyError::Overflow)` only if the multiplication overflows;
   never returns a currency-mismatch error, since `no_shows` is a plain count.
 - Worked example: `lost_revenue(180, Money::from_major(150, iso::USD)) ==
   Ok(Money::from_major(27_000, iso::USD))`
 
-### `net_revenue_impact<T: FormattableCurrency>(gross_scheduled_revenue: Money<'_, T>, lost_revenue: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>`
+### `net_revenue_impact(gross_scheduled_revenue: Money<'static, iso::Currency>, lost_revenue: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>`
 
-- Formula: `gross_scheduled_revenue - lost_revenue` (via `Money::sub`)
+- Formula: `gross_scheduled_revenue - lost_revenue` (via `Money::sub`, called
+  directly)
 - Returns `Err(MoneyError::CurrencyMismatch { .. })` if the two arguments are
   denominated in different currencies.
 - Worked example:
@@ -39,3 +41,8 @@ file's contract differs from an `f64`-based one.
 - Neither function validates that `revenue_per_appointment` or
   `gross_scheduled_revenue` is positive; a negative amount (e.g. modelling a
   refund) is passed through unchanged.
+- The `Money` type is concrete (`Money<'static, iso::Currency>`), not
+  generic over `rusty_money::FormattableCurrency` — this module uses
+  `rusty_money` directly rather than adding its own generic abstraction on
+  top of it, so it only supports rusty-money's built-in ISO-4217 currency
+  set, not a caller-defined custom currency type.

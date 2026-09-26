@@ -86,7 +86,7 @@
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 //! project at the time this module was written.
 
-use rusty_money::{FormattableCurrency, Money, MoneyError};
+use rusty_money::{Money, MoneyError, iso};
 
 /// The lost revenue from no-shows: the count of true no-shows multiplied by
 /// the revenue a single completed appointment would have generated.
@@ -115,10 +115,10 @@ use rusty_money::{FormattableCurrency, Money, MoneyError};
 /// let lost = lost_revenue(180, revenue_per_appointment).unwrap();
 /// assert_eq!(lost, Money::from_major(27_000, iso::USD));
 /// ```
-pub fn lost_revenue<T: FormattableCurrency>(
+pub fn lost_revenue(
     no_shows: u32,
-    revenue_per_appointment: Money<'_, T>,
-) -> Result<Money<'_, T>, MoneyError> {
+    revenue_per_appointment: Money<'static, iso::Currency>,
+) -> Result<Money<'static, iso::Currency>, MoneyError> {
     revenue_per_appointment.mul(no_shows)
 }
 
@@ -152,17 +152,16 @@ pub fn lost_revenue<T: FormattableCurrency>(
 /// let lost_eur = Money::from_major(27_000, iso::EUR);
 /// assert!(net_revenue_impact(gross_scheduled, lost_eur).is_err());
 /// ```
-pub fn net_revenue_impact<'a, T: FormattableCurrency>(
-    gross_scheduled_revenue: Money<'a, T>,
-    lost_revenue: Money<'a, T>,
-) -> Result<Money<'a, T>, MoneyError> {
+pub fn net_revenue_impact(
+    gross_scheduled_revenue: Money<'static, iso::Currency>,
+    lost_revenue: Money<'static, iso::Currency>,
+) -> Result<Money<'static, iso::Currency>, MoneyError> {
     gross_scheduled_revenue.sub(lost_revenue)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rusty_money::iso;
 
     // Doc line: "180 no-shows × $150.00 = $27,000.00."
     #[test]

@@ -15,10 +15,11 @@
       "panics": "none of the public functions panic"
     },
     "money_modules": {
-      "numeric_type": "u32 counts in, rusty_money::Money<'_, T: FormattableCurrency> in and out",
+      "numeric_type": "u32 counts in, rusty_money::Money<'static, rusty_money::iso::Currency> in and out",
       "fallible_return": "Result<Money, rusty_money::MoneyError> — Err on currency mismatch or overflow, never on a zero count",
       "panics": "none of the public functions panic",
-      "default_illustrative_currency": "USD — a documentation convention only; functions are generic over any FormattableCurrency and accept a Money value in any currency the caller constructs",
+      "default_illustrative_currency": "USD — a documentation convention only",
+      "wrapping_policy": "each function is a one-line pass-through directly to rusty_money's own Money::mul/Money::sub, not a generic wrapper — no FormattableCurrency type parameter",
       "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue"]
     }
   },
@@ -251,7 +252,7 @@
       "functions": [
         {
           "name": "lost_revenue",
-          "signature": "fn lost_revenue<T: FormattableCurrency>(no_shows: u32, revenue_per_appointment: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "signature": "fn lost_revenue(no_shows: u32, revenue_per_appointment: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
           "formula": "revenue_per_appointment * no_shows",
           "returns_err_when": "the multiplication overflows (MoneyError::Overflow); never on currency mismatch, since no_shows is a plain count",
           "example": {
@@ -261,7 +262,7 @@
         },
         {
           "name": "net_revenue_impact",
-          "signature": "fn net_revenue_impact<T: FormattableCurrency>(gross_scheduled_revenue: Money<'_, T>, lost_revenue: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "signature": "fn net_revenue_impact(gross_scheduled_revenue: Money<'static, iso::Currency>, lost_revenue: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
           "formula": "gross_scheduled_revenue - lost_revenue",
           "returns_err_when": "the two arguments are denominated in different currencies (MoneyError::CurrencyMismatch)",
           "example": {
@@ -284,7 +285,7 @@
       "functions": [
         {
           "name": "billable_revenue",
-          "signature": "fn billable_revenue<T: FormattableCurrency>(billing_eligible_patients: u32, reimbursement_per_patient: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "signature": "fn billable_revenue(billing_eligible_patients: u32, reimbursement_per_patient: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
           "formula": "reimbursement_per_patient * billing_eligible_patients",
           "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
           "example": {
@@ -294,7 +295,7 @@
         },
         {
           "name": "revenue_at_risk",
-          "signature": "fn revenue_at_risk<T: FormattableCurrency>(non_eligible_patients: u32, reimbursement_per_patient: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>",
+          "signature": "fn revenue_at_risk(non_eligible_patients: u32, reimbursement_per_patient: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
           "formula": "reimbursement_per_patient * non_eligible_patients",
           "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
           "example": {

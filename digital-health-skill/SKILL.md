@@ -64,11 +64,13 @@ match no_show_rate(180.0, 2_000.0) {
 
 The two cost-and-revenue functions (`no_show_lost_revenue`,
 `remote_patient_monitoring_billing_revenue`) instead return
-`Result<Money<'_, T>, rusty_money::MoneyError>`. `Err` is not a
-zero-denominator condition here — there's no division — it's either a
-`CurrencyMismatch` (only possible in `net_revenue_impact`, which subtracts
-two caller-supplied `Money` values) or an `Overflow`. Each function's
-rustdoc `# Errors` section says which apply.
+`Result<Money<'static, iso::Currency>, rusty_money::MoneyError>` — each is a
+one-line call straight through to `rusty_money`'s own `Money::mul` or
+`Money::sub`, not a wrapper type. `Err` is not a zero-denominator condition
+here — there's no division — it's either a `CurrencyMismatch` (only possible
+in `net_revenue_impact`, which subtracts two caller-supplied `Money` values)
+or an `Overflow`. Each function's rustdoc `# Errors` section says which
+apply.
 
 ```rust
 use rusty_money::{Money, iso};

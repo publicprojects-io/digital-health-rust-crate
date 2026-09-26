@@ -13,18 +13,19 @@ file's contract differs from an `f64`-based one.
 
 ## Contract
 
-### `billable_revenue<T: FormattableCurrency>(billing_eligible_patients: u32, reimbursement_per_patient: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>`
+### `billable_revenue(billing_eligible_patients: u32, reimbursement_per_patient: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>`
 
 - Formula: `reimbursement_per_patient * billing_eligible_patients` (via
-  `Money::mul`)
+  `Money::mul`, called directly — this function is a one-line pass-through,
+  not a wrapper type)
 - Returns `Err(MoneyError::Overflow)` only if the multiplication overflows.
 - Worked example: `billable_revenue(280, Money::from_major(50, iso::USD)) ==
   Ok(Money::from_major(14_000, iso::USD))`
 
-### `revenue_at_risk<T: FormattableCurrency>(non_eligible_patients: u32, reimbursement_per_patient: Money<'_, T>) -> Result<Money<'_, T>, MoneyError>`
+### `revenue_at_risk(non_eligible_patients: u32, reimbursement_per_patient: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>`
 
 - Formula: `reimbursement_per_patient * non_eligible_patients` (via
-  `Money::mul`)
+  `Money::mul`, called directly)
 - Returns `Err(MoneyError::Overflow)` only if the multiplication overflows.
 - Worked example: `revenue_at_risk(120, Money::from_major(50, iso::USD)) ==
   Ok(Money::from_major(6_000, iso::USD))`
@@ -40,3 +41,8 @@ file's contract differs from an `f64`-based one.
   [`spec/remote-patient-monitoring-adherence-rate.md`](remote-patient-monitoring-adherence-rate.md)
   for the underlying billing-threshold definition this module's counts come
   from.
+- The `Money` type is concrete (`Money<'static, iso::Currency>`), not
+  generic over `rusty_money::FormattableCurrency` — this module uses
+  `rusty_money` directly rather than adding its own generic abstraction on
+  top of it, so it only supports rusty-money's built-in ISO-4217 currency
+  set, not a caller-defined custom currency type.

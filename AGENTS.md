@@ -24,17 +24,17 @@ Most modules take and return `f64`, returning `Option<f64>` when a
 denominator can be zero — see [`spec/README.md`](spec/README.md)'s
 "Conventions used in every `f64` spec file". The two cost-and-revenue
 modules (`no_show_lost_revenue`, `remote_patient_monitoring_billing_revenue`)
-instead take `u32` counts and a
-[`rusty_money::Money`](https://docs.rs/rusty-money) amount, returning
-`Result<Money, rusty_money::MoneyError>` — see
-[`spec/README.md`](spec/README.md)'s "Money convention", including its "USD
-is the default illustrative currency" rule: every worked example, doctest,
-and unit test in a money-based module uses `iso::USD` unless it's
-specifically demonstrating a currency-mismatch error. The functions
-themselves stay generic over `T: FormattableCurrency` — this is a
-documentation convention, not an API restriction to USD. `rusty-money` is
-this crate's only dependency; adding a further one still needs to be raised
-with the user first, it isn't now open-ended just because the first one was
+instead take `u32` counts and a concrete
+[`rusty_money::Money<'static, iso::Currency>`](https://docs.rs/rusty-money)
+amount, returning `Result<Money, rusty_money::MoneyError>` — see
+[`spec/README.md`](spec/README.md)'s "Money convention". Two rules there
+matter most: these functions use `rusty_money` directly (each is a one-line
+call straight through to `Money::mul`/`Money::sub`, not a generic wrapper
+type — do not reintroduce a `T: FormattableCurrency` type parameter), and
+every worked example, doctest, and unit test uses `iso::USD` unless it's
+specifically demonstrating a currency-mismatch error. `rusty-money` is this
+crate's only dependency; adding a further one still needs to be raised with
+the user first, it isn't now open-ended just because the first one was
 approved.
 
 ## Build, test, lint
@@ -95,11 +95,14 @@ below note where the two diverge.
      `crate::internal::percentile` rather than reimplementing the
      interpolation.
    - `Money`-based: each `pub fn` takes counts as `u32` (never `f64` — a
-     fractional count has no meaning) and a
-     `rusty_money::Money<'_, T: FormattableCurrency>` amount, returning
-     `Result<Money<'_, T>, rusty_money::MoneyError>`. Don't add
-     `#[must_use]`: `Result` already carries it, and clippy's pedantic
-     `must_use_candidate` skips types that already do.
+     fractional count has no meaning) and a concrete
+     `rusty_money::Money<'static, iso::Currency>` amount, returning
+     `Result<Money<'static, iso::Currency>, rusty_money::MoneyError>`. Call
+     `rusty_money`'s own arithmetic (`Money::mul`, `Money::sub`, ...)
+     directly in the function body — don't add a `T: FormattableCurrency`
+     generic parameter, that's wrapping the library rather than using it.
+     Don't add `#[must_use]`: `Result` already carries it, and clippy's
+     pedantic `must_use_candidate` skips types that already do.
    - Either way: rustdoc with `# Arguments`, `# Returns` (`f64`-based) or
      `# Errors` (`Money`-based, naming which `MoneyError` variants apply),
      and a doctest under `# Examples` that reproduces the module's worked

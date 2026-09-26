@@ -66,8 +66,9 @@ module's rustdoc and don't require a spec change.
 
 `no_show_lost_revenue` and `remote_patient_monitoring_billing_revenue` are
 the exception to "everything is `f64`": they take counts as `u32` and a
-[`rusty_money::Money`](https://docs.rs/rusty-money) amount, and return
-`Result<Money, rusty_money::MoneyError>` instead of `Option<f64>`.
+concrete [`rusty_money::Money<'static,
+rusty_money::iso::Currency>`](https://docs.rs/rusty-money) amount, and
+return `Result<Money, rusty_money::MoneyError>` instead of `Option<f64>`.
 
 - Counts are `u32`, not `f64` — a fractional appointment or patient has no
   meaning, and `u32` converts to `rusty_money`'s underlying `Decimal` type
@@ -82,10 +83,18 @@ the exception to "everything is `f64`": they take counts as `u32` and a
   exchange rate — those are always caller-supplied `Money` arguments. See
   each module's `## Data sources and caveats` for why (reimbursement rates
   change annually and vary by payer and locality).
+- **`Money` is used directly, not wrapped.** Every function's body is a
+  single call straight through to `rusty_money`'s own `Money::mul` or
+  `Money::sub` — the function exists only to give a domain name to that one
+  call, not to add logic on top of it. The `Money` type is concrete
+  (`Money<'static, iso::Currency>`), not generic over
+  `rusty_money::FormattableCurrency`: adding our own generic type parameter
+  on top of `rusty_money`'s would itself be a form of wrapping. This means
+  these functions work with rusty-money's built-in ISO-4217 currencies, not
+  a caller-defined custom currency type — if that's ever needed, call
+  `rusty_money`'s methods directly instead of extending this crate's
+  signatures with a generic parameter.
 - **USD is the default illustrative currency.** Every worked example,
   doctest, and unit test in a money-based module uses `iso::USD` unless it
   is specifically demonstrating `MoneyError::CurrencyMismatch` (where a
-  second currency, e.g. `iso::EUR`, is required to trigger the error). This
-  is a documentation convention only — the functions themselves are generic
-  over `T: FormattableCurrency` and work with any ISO currency (or a custom
-  one) a caller constructs a `Money` value in.
+  second currency, e.g. `iso::EUR`, is required to trigger the error).
