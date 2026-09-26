@@ -6,26 +6,29 @@ Instructions for any AI coding agent working in this repository. See
 ## What this crate is
 
 `digital-health` is a Rust crate of pure calculation functions for digital
-health KPIs — thirteen modules under `src/`, one per metric topic. Five
+health KPIs — sixteen modules under `src/`, one per metric topic. Five
 mirror a topic in the upstream [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 project directly (`patient_portal_adoption_rate`, `telehealth_visit_rate`,
 `appointment_no_show_rate`, `clinical_alert_override_rate`,
 `digital_referral_turnaround_time`; each ends its rustdoc with a `Topic
-doc:` line to the upstream source). Eight more cover well-evidenced metrics
+doc:` line to the upstream source). Eleven more cover well-evidenced metrics
 not yet in that project (`remote_patient_monitoring_adherence_rate`,
 `secure_messaging_response_time`, `e_prescribing_transmission_accuracy`,
 `cpoe_adoption_rate`, `telehealth_technical_failure_rate`,
+`patient_self_scheduling_rate`, `duplicate_patient_record_rate`,
 `no_show_lost_revenue`, `remote_patient_monitoring_billing_revenue`,
-`telehealth_cost_avoidance`; each ends with an `Independent topic:` line
-pointing back at its own `## Sources` section instead). Every module's
-`spec/` file states which kind it is on its `Upstream topic:` line.
+`telehealth_cost_avoidance`, `patient_self_scheduling_cost_savings`; each
+ends with an `Independent topic:` line pointing back at its own `## Sources`
+section instead). Every module's `spec/` file states which kind it is on
+its `Upstream topic:` line.
 
 Most modules take and return `f64`, returning `Option<f64>` when a
 denominator can be zero — see [`spec/README.md`](spec/README.md)'s
-"Conventions used in every `f64` spec file". The three cost-and-revenue
+"Conventions used in every `f64` spec file". The four cost-and-revenue
 modules (`no_show_lost_revenue`, `remote_patient_monitoring_billing_revenue`,
-`telehealth_cost_avoidance`) instead take `u32` counts and a concrete
+`telehealth_cost_avoidance`, `patient_self_scheduling_cost_savings`) instead
+take `u32` counts and a concrete
 [`rusty_money::Money<'static, iso::Currency>`](https://docs.rs/rusty-money)
 amount, returning `Result<Money, rusty_money::MoneyError>` — see
 [`spec/README.md`](spec/README.md)'s "Money convention". Two rules there

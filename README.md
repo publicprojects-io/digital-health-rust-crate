@@ -1,15 +1,15 @@
 # Digital Health Rust crate
 
-Digital health metrics models, structs, calculations, and examples — 13
+Digital health metrics models, structs, calculations, and examples — 16
 modules covering patient engagement and access, digital care operations and
 safety, and cost and revenue. One module per topic. Five modules follow
 [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-directly; eight more cover well-evidenced metrics not yet in that project,
+directly; eleven more cover well-evidenced metrics not yet in that project,
 sourced independently (see each module's rustdoc `Sources` section).
 
 Most modules are rate calculations: `f64` in, `Option<f64>` out, `None`
-wherever a denominator can be zero. The three cost-and-revenue modules
+wherever a denominator can be zero. The four cost-and-revenue modules
 instead use [`rusty-money`](https://docs.rs/rusty-money) for currency-safe
 arithmetic: they take counts and a `Money` amount, and return
 `Result<Money, MoneyError>` rather than a plain `f64`, so a currency
@@ -21,7 +21,7 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-digital-health = "0.3"
+digital-health = "0.4"
 ```
 
 ## Quickstart
@@ -88,6 +88,9 @@ digital health business case.
 - `telehealth_technical_failure_rate` — the metric behind
   `telehealth_visit_rate`'s own warning against counting attempted rather
   than completed visits
+- `patient_self_scheduling_rate` — the natural continuation of
+  `patient_portal_adoption_rate`'s funnel, and one of the levers
+  `appointment_no_show_rate` itself points to
 
 ### Digital care operations and safety
 
@@ -102,6 +105,8 @@ digital health business case.
 - `cpoe_adoption_rate` — the precondition for `clinical_alert_override_rate`
   to mean anything, and the verbal-order rate hiding beneath a healthy
   override rate
+- `duplicate_patient_record_rate` — the silent failure mode behind
+  interoperability, and a direct patient-safety risk in its own right
 
 ### Cost and revenue (`Money`, not `f64`)
 
@@ -112,6 +117,9 @@ digital health business case.
   `remote_patient_monitoring_adherence_rate`'s cohort billing-eligible rate
 - `telehealth_cost_avoidance` — the currency amount behind
   `telehealth_visit_rate`, netted against the platform cost of running it
+- `patient_self_scheduling_cost_savings` — the currency amount behind
+  `patient_self_scheduling_rate`, netted against the scheduling platform's
+  own cost
 
 ## Testing
 

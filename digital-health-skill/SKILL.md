@@ -6,7 +6,7 @@ description: Compute digital health KPIs — patient portal adoption, telehealth
 # Digital Health Metrics
 
 `digital-health` (this repository) is a Rust crate: one module per metric,
-each a small set of pure functions. Most take and return `f64`; three
+each a small set of pure functions. Most take and return `f64`; four
 cost-and-revenue modules take `u32` counts and a
 [`rusty_money::Money`](https://docs.rs/rusty-money) amount instead (see
 "Reading the result" below for how the two differ). Full contracts live in
@@ -48,6 +48,12 @@ the right function and interpreting its result.
 | Currency amount at risk from a non-adherent RPM cohort | `revenue_at_risk` | `remote_patient_monitoring_billing_revenue` |
 | Currency amount of travel/facility cost avoided via telehealth | `cost_avoided` | `telehealth_cost_avoidance` |
 | Cost avoided minus telehealth platform's own operating cost | `net_savings` | `telehealth_cost_avoidance` |
+| Share of appointments booked by the patient online | `self_scheduling_rate` | `patient_self_scheduling_rate` |
+| Share of self-scheduled visits booked same-day/next-day | `same_day_self_scheduling_rate` | `patient_self_scheduling_rate` |
+| Share of a patient index identified as duplicate records | `duplicate_record_rate` | `duplicate_patient_record_rate` |
+| Share of identified duplicates that have been merged | `resolved_duplicate_rate` | `duplicate_patient_record_rate` |
+| Currency amount of staff time saved by self-scheduling | `staff_time_saved_cost` | `patient_self_scheduling_cost_savings` |
+| Staff time saved minus scheduling platform's own operating cost | `net_savings` | `patient_self_scheduling_cost_savings` |
 
 ## Reading the result
 
@@ -68,16 +74,16 @@ match no_show_rate(180.0, 2_000.0) {
 }
 ```
 
-The three cost-and-revenue modules (`no_show_lost_revenue`,
-`remote_patient_monitoring_billing_revenue`, `telehealth_cost_avoidance`)
-instead return `Result<Money<'static, iso::Currency>, rusty_money::MoneyError>`
-— each is a
+The four cost-and-revenue modules (`no_show_lost_revenue`,
+`remote_patient_monitoring_billing_revenue`, `telehealth_cost_avoidance`,
+`patient_self_scheduling_cost_savings`) instead return
+`Result<Money<'static, iso::Currency>, rusty_money::MoneyError>` — each is a
 one-line call straight through to `rusty_money`'s own `Money::mul` or
 `Money::sub`, not a wrapper type. `Err` is not a zero-denominator condition
 here — there's no division — it's either a `CurrencyMismatch` (only possible
-in `net_revenue_impact`, which subtracts two caller-supplied `Money` values)
-or an `Overflow`. Each function's rustdoc `# Errors` section says which
-apply.
+when subtracting two caller-supplied `Money` values, e.g.
+`net_revenue_impact` or a module's `net_savings`) or an `Overflow`. Each
+function's rustdoc `# Errors` section says which apply.
 
 ```rust
 use rusty_money::{Money, iso};
@@ -108,23 +114,31 @@ match lost_revenue(180, revenue_per_appointment) {
   denominator, nor that a `Money` amount is positive; it trusts the
   caller's counts. Validate upstream if the data source might not guarantee
   that.
-- `remote_patient_monitoring_billing_revenue`'s `reimbursement_per_patient`,
-  `no_show_lost_revenue`'s `revenue_per_appointment`, and
-  `telehealth_cost_avoidance`'s `avoided_cost_per_encounter` /
-  `platform_cost` are always caller-supplied — this crate never hard-codes a
-  specific reimbursement, cost, or CPT/HCPCS rate, since those change
-  annually and vary by payer, locality, and service line. Look the current
-  figure up rather than reusing a worked example's illustrative number.
+- Every reimbursement, cost, or per-unit figure in a money-based module
+  (`reimbursement_per_patient`, `revenue_per_appointment`,
+  `avoided_cost_per_encounter`, `platform_cost`,
+  `avoided_cost_per_booking`, ...) is always caller-supplied — this crate
+  never hard-codes a specific reimbursement, cost, or CPT/HCPCS rate, since
+  those change annually and vary by payer, locality, and service line. Look
+  the current figure up rather than reusing a worked example's illustrative
+  number.
 - A platform that only logs a telehealth session's final successful
   connection makes `telehealth_technical_failure_rate` unmeasurable —
   failed attempts must be retained as distinct events, not silently
   retried away, before this metric can be calculated at all.
-- Eight of the crate's thirteen modules —
+- `duplicate_patient_record_rate`'s `duplicate_record_rate` is not
+  comparable across organizations with different patient-matching
+  algorithms — a stricter probabilistic matcher surfaces more candidate
+  duplicates than a looser deterministic one, independent of true
+  underlying data quality.
+- Eleven of the crate's sixteen modules —
   `remote_patient_monitoring_adherence_rate`,
   `secure_messaging_response_time`, `e_prescribing_transmission_accuracy`,
   `cpoe_adoption_rate`, `telehealth_technical_failure_rate`,
+  `patient_self_scheduling_rate`, `duplicate_patient_record_rate`,
   `no_show_lost_revenue`, `remote_patient_monitoring_billing_revenue`,
-  `telehealth_cost_avoidance` — are not present in [Digital Health
+  `telehealth_cost_avoidance`, `patient_self_scheduling_cost_savings` — are
+  not present in [Digital Health
   Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
   and are sourced independently from general literature and standards
   instead; each module's rustdoc `## Sources` section says exactly what.

@@ -43,7 +43,7 @@
 //! Five modules mirror a topic in [Digital Health
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 //! directly (each ends its rustdoc with a `Topic doc:` line to the upstream
-//! source); eight more cover well-evidenced metrics not yet in that project
+//! source); eleven more cover well-evidenced metrics not yet in that project
 //! (each ends with an `Independent topic:` line instead, and cites its own
 //! sources).
 //!
@@ -60,6 +60,9 @@
 //!   patient is
 //! - [`telehealth_technical_failure_rate`] — the metric behind [`telehealth_visit_rate`]'s
 //!   own warning against counting attempted rather than completed visits
+//! - [`patient_self_scheduling_rate`] — the natural continuation of
+//!   [`patient_portal_adoption_rate`]'s funnel, and one of the levers
+//!   [`appointment_no_show_rate`] itself points to
 //!
 //! ### Digital care operations and safety
 //!
@@ -74,6 +77,8 @@
 //! - [`cpoe_adoption_rate`] — the precondition for
 //!   [`clinical_alert_override_rate`] to mean anything, and the verbal-order
 //!   rate that hides beneath a healthy override rate
+//! - [`duplicate_patient_record_rate`] — the silent failure mode behind
+//!   interoperability, and a direct patient-safety risk in its own right
 //!
 //! ### Cost and revenue
 //!
@@ -86,6 +91,9 @@
 //! - [`telehealth_cost_avoidance`] — the currency amount behind
 //!   [`telehealth_visit_rate`], netted against the platform cost of running
 //!   it
+//! - [`patient_self_scheduling_cost_savings`] — the currency amount behind
+//!   [`patient_self_scheduling_rate`], netted against the scheduling
+//!   platform's own cost
 //!
 //! ## Testing
 //!
@@ -96,10 +104,13 @@ pub mod appointment_no_show_rate;
 pub mod clinical_alert_override_rate;
 pub mod cpoe_adoption_rate;
 pub mod digital_referral_turnaround_time;
+pub mod duplicate_patient_record_rate;
 pub mod e_prescribing_transmission_accuracy;
 mod internal;
 pub mod no_show_lost_revenue;
 pub mod patient_portal_adoption_rate;
+pub mod patient_self_scheduling_cost_savings;
+pub mod patient_self_scheduling_rate;
 pub mod remote_patient_monitoring_adherence_rate;
 pub mod remote_patient_monitoring_billing_revenue;
 pub mod secure_messaging_response_time;

@@ -11,8 +11,8 @@ that content is written once and doesn't drift.
 
 Five specs mirror a topic in [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-directly; eight more cover well-evidenced metrics not yet in that project.
-Each file's `Upstream topic` line says which. Three of the eight independent
+directly; eleven more cover well-evidenced metrics not yet in that project.
+Each file's `Upstream topic` line says which. Four of the eleven independent
 specs are money-based (`Numeric type` column) — see `## Money convention`
 below.
 
@@ -22,9 +22,12 @@ below.
 | [`clinical-alert-override-rate.md`](clinical-alert-override-rate.md) | [`src/clinical_alert_override_rate.rs`](../src/clinical_alert_override_rate.rs) | yes | `f64` |
 | [`cpoe-adoption-rate.md`](cpoe-adoption-rate.md) | [`src/cpoe_adoption_rate.rs`](../src/cpoe_adoption_rate.rs) | no | `f64` |
 | [`digital-referral-turnaround-time.md`](digital-referral-turnaround-time.md) | [`src/digital_referral_turnaround_time.rs`](../src/digital_referral_turnaround_time.rs) | yes | `f64` |
+| [`duplicate-patient-record-rate.md`](duplicate-patient-record-rate.md) | [`src/duplicate_patient_record_rate.rs`](../src/duplicate_patient_record_rate.rs) | no | `f64` |
 | [`e-prescribing-transmission-accuracy.md`](e-prescribing-transmission-accuracy.md) | [`src/e_prescribing_transmission_accuracy.rs`](../src/e_prescribing_transmission_accuracy.rs) | no | `f64` |
 | [`no-show-lost-revenue.md`](no-show-lost-revenue.md) | [`src/no_show_lost_revenue.rs`](../src/no_show_lost_revenue.rs) | no | `Money` |
 | [`patient-portal-adoption-rate.md`](patient-portal-adoption-rate.md) | [`src/patient_portal_adoption_rate.rs`](../src/patient_portal_adoption_rate.rs) | yes | `f64` |
+| [`patient-self-scheduling-cost-savings.md`](patient-self-scheduling-cost-savings.md) | [`src/patient_self_scheduling_cost_savings.rs`](../src/patient_self_scheduling_cost_savings.rs) | no | `Money` |
+| [`patient-self-scheduling-rate.md`](patient-self-scheduling-rate.md) | [`src/patient_self_scheduling_rate.rs`](../src/patient_self_scheduling_rate.rs) | no | `f64` |
 | [`remote-patient-monitoring-adherence-rate.md`](remote-patient-monitoring-adherence-rate.md) | [`src/remote_patient_monitoring_adherence_rate.rs`](../src/remote_patient_monitoring_adherence_rate.rs) | no | `f64` |
 | [`remote-patient-monitoring-billing-revenue.md`](remote-patient-monitoring-billing-revenue.md) | [`src/remote_patient_monitoring_billing_revenue.rs`](../src/remote_patient_monitoring_billing_revenue.rs) | no | `Money` |
 | [`secure-messaging-response-time.md`](secure-messaging-response-time.md) | [`src/secure_messaging_response_time.rs`](../src/secure_messaging_response_time.rs) | no | `f64` |
@@ -34,7 +37,7 @@ below.
 
 For the five upstream-backed specs, the formula and worked-example numbers
 are themselves sourced from the Digital Health Metrics project's topic
-docs. For the eight independent specs, they're sourced from the general
+docs. For the eleven independent specs, they're sourced from the general
 literature and standards cited in that module's rustdoc `## Sources`
 section — there is no upstream topic doc to check them against.
 

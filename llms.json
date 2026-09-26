@@ -1,6 +1,6 @@
 {
   "name": "digital-health",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Digital health metrics models, structs, calculations, and examples.",
   "language": "rust",
   "edition": "2024",
@@ -20,7 +20,7 @@
       "panics": "none of the public functions panic",
       "default_illustrative_currency": "USD — a documentation convention only",
       "wrapping_policy": "each function is a one-line pass-through directly to rusty_money's own Money::mul/Money::sub, not a generic wrapper — no FormattableCurrency type parameter",
-      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance"]
+      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance", "patient_self_scheduling_cost_savings"]
     }
   },
   "modules": [
@@ -380,6 +380,85 @@
               "platform_cost": { "major_units": 18000, "currency": "USD" }
             },
             "output": { "major_units": 46000, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "patient_self_scheduling_rate",
+      "path": "src/patient_self_scheduling_rate.rs",
+      "spec": "spec/patient-self-scheduling-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of appointments booked by the patient online, and the share of those booked for same-day or next-day access.",
+      "functions": [
+        {
+          "name": "self_scheduling_rate",
+          "signature": "fn self_scheduling_rate(self_scheduled: f64, total_scheduled: f64) -> Option<f64>",
+          "formula": "self_scheduled / total_scheduled * 100",
+          "returns_none_when": "total_scheduled == 0.0",
+          "example": { "input": [640.0, 2000.0], "output": 32.0 }
+        },
+        {
+          "name": "same_day_self_scheduling_rate",
+          "signature": "fn same_day_self_scheduling_rate(same_day_self_scheduled: f64, self_scheduled: f64) -> Option<f64>",
+          "formula": "same_day_self_scheduled / self_scheduled * 100",
+          "returns_none_when": "self_scheduled == 0.0",
+          "example": { "input": [192.0, 640.0], "output": 30.0 }
+        }
+      ]
+    },
+    {
+      "name": "duplicate_patient_record_rate",
+      "path": "src/duplicate_patient_record_rate.rs",
+      "spec": "spec/duplicate-patient-record-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of a master patient index identified as likely duplicates, and the share of identified duplicates that have been merged.",
+      "functions": [
+        {
+          "name": "duplicate_record_rate",
+          "signature": "fn duplicate_record_rate(duplicate_records: f64, total_records: f64) -> Option<f64>",
+          "formula": "duplicate_records / total_records * 100",
+          "returns_none_when": "total_records == 0.0",
+          "example": { "input": [42000.0, 500000.0], "output": 8.4 }
+        },
+        {
+          "name": "resolved_duplicate_rate",
+          "signature": "fn resolved_duplicate_rate(resolved_duplicates: f64, identified_duplicates: f64) -> Option<f64>",
+          "formula": "resolved_duplicates / identified_duplicates * 100",
+          "returns_none_when": "identified_duplicates == 0.0",
+          "example": { "input": [31500.0, 42000.0], "output": 75.0 }
+        }
+      ]
+    },
+    {
+      "name": "patient_self_scheduling_cost_savings",
+      "path": "src/patient_self_scheduling_cost_savings.rs",
+      "spec": "spec/patient-self-scheduling-cost-savings.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount of staff scheduling-call time saved by patient self-scheduling, netted against the scheduling platform's own operating cost.",
+      "functions": [
+        {
+          "name": "staff_time_saved_cost",
+          "signature": "fn staff_time_saved_cost(self_scheduled: u32, avoided_cost_per_booking: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "avoided_cost_per_booking * self_scheduled",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "self_scheduled": 640, "avoided_cost_per_booking": { "major_units": 6, "currency": "USD" } },
+            "output": { "major_units": 3840, "currency": "USD" }
+          }
+        },
+        {
+          "name": "net_savings",
+          "signature": "fn net_savings(staff_time_saved_cost: Money<'static, iso::Currency>, platform_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "staff_time_saved_cost - platform_cost",
+          "returns_err_when": "the two arguments are denominated in different currencies (MoneyError::CurrencyMismatch)",
+          "example": {
+            "input": {
+              "staff_time_saved_cost": { "major_units": 3840, "currency": "USD" },
+              "platform_cost": { "major_units": 900, "currency": "USD" }
+            },
+            "output": { "major_units": 2940, "currency": "USD" }
           }
         }
       ]
