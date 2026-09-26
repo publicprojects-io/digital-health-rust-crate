@@ -22,7 +22,7 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-digital-health = "0.5"
+digital-health = "1.0"
 ```
 
 ## Quickstart
