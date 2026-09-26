@@ -1,6 +1,6 @@
 {
   "name": "digital-health",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Digital health metrics models, structs, calculations, and examples.",
   "language": "rust",
   "edition": "2024",
@@ -20,7 +20,7 @@
       "panics": "none of the public functions panic",
       "default_illustrative_currency": "USD — a documentation convention only",
       "wrapping_policy": "each function is a one-line pass-through directly to rusty_money's own Money::mul/Money::sub, not a generic wrapper — no FormattableCurrency type parameter",
-      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance", "patient_self_scheduling_cost_savings"]
+      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance", "patient_self_scheduling_cost_savings", "econsult_cost_avoidance", "digital_intake_cost_savings", "duplicate_record_remediation_cost", "cpoe_cost_impact"]
     }
   },
   "modules": [
@@ -459,6 +459,365 @@
               "platform_cost": { "major_units": 900, "currency": "USD" }
             },
             "output": { "major_units": 2940, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "digital_intake_form_completion_rate",
+      "path": "src/digital_intake_form_completion_rate.rs",
+      "spec": "spec/digital-intake-form-completion-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of patients completing intake forms online, and the share of those completed before arrival.",
+      "functions": [
+        {
+          "name": "intake_completion_rate",
+          "signature": "fn intake_completion_rate(completed_online: f64, total_scheduled: f64) -> Option<f64>",
+          "formula": "completed_online / total_scheduled * 100",
+          "returns_none_when": "total_scheduled == 0.0",
+          "example": { "input": [1200.0, 2000.0], "output": 60.0 }
+        },
+        {
+          "name": "pre_visit_completion_rate",
+          "signature": "fn pre_visit_completion_rate(completed_before_arrival: f64, completed_online: f64) -> Option<f64>",
+          "formula": "completed_before_arrival / completed_online * 100",
+          "returns_none_when": "completed_online == 0.0",
+          "example": { "input": [900.0, 1200.0], "output": 75.0 }
+        }
+      ]
+    },
+    {
+      "name": "econsult_turnaround_time",
+      "path": "src/econsult_turnaround_time.rs",
+      "spec": "spec/econsult-turnaround-time.md",
+      "upstream_topic": false,
+      "summary": "Elapsed time from e-consult submission to specialist response, and percentile statistics over a set of turnaround times.",
+      "functions": [
+        {
+          "name": "elapsed_hours",
+          "signature": "fn elapsed_hours(submission_hour: f64, response_hour: f64) -> f64",
+          "formula": "response_hour - submission_hour",
+          "returns_none_when": null,
+          "example": { "input": [100.0, 104.0], "output": 4.0 }
+        },
+        {
+          "name": "percentile",
+          "signature": "fn percentile(turnaround_times: &[f64], p: f64) -> Option<f64>",
+          "formula": "linear interpolation between order statistics at rank (p / 100).clamp(0, 1) * (turnaround_times.len() - 1), after sorting with f64::total_cmp (delegates to the same internal helper as digital_referral_turnaround_time::percentile)",
+          "returns_none_when": "turnaround_times.is_empty()",
+          "example": {
+            "input": [[1.0, 2.0, 3.0, 4.0, 5.0, 5.0, 8.0, 12.0, 48.0, 48.0], 50.0],
+            "output": 5.0
+          }
+        }
+      ]
+    },
+    {
+      "name": "medication_reconciliation_rate",
+      "path": "src/medication_reconciliation_rate.rs",
+      "spec": "spec/medication-reconciliation-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of admissions and discharges with a completed medication reconciliation.",
+      "functions": [
+        {
+          "name": "admission_reconciliation_rate",
+          "signature": "fn admission_reconciliation_rate(admissions_reconciled: f64, total_admissions: f64) -> Option<f64>",
+          "formula": "admissions_reconciled / total_admissions * 100",
+          "returns_none_when": "total_admissions == 0.0",
+          "example": { "input": [850.0, 1000.0], "output": 85.0 }
+        },
+        {
+          "name": "discharge_reconciliation_rate",
+          "signature": "fn discharge_reconciliation_rate(discharges_reconciled: f64, total_discharges: f64) -> Option<f64>",
+          "formula": "discharges_reconciled / total_discharges * 100",
+          "returns_none_when": "total_discharges == 0.0",
+          "example": { "input": [760.0, 950.0], "output": 80.0 }
+        }
+      ]
+    },
+    {
+      "name": "interoperability_document_exchange_rate",
+      "path": "src/interoperability_document_exchange_rate.rs",
+      "spec": "spec/interoperability-document-exchange-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of document exchange transactions that transmit successfully, and the share that parse into structured, usable data.",
+      "functions": [
+        {
+          "name": "exchange_success_rate",
+          "signature": "fn exchange_success_rate(successful_transmissions: f64, total_exchange_attempts: f64) -> Option<f64>",
+          "formula": "successful_transmissions / total_exchange_attempts * 100",
+          "returns_none_when": "total_exchange_attempts == 0.0",
+          "example": { "input": [47500.0, 50000.0], "output": 95.0 }
+        },
+        {
+          "name": "structured_data_parse_rate",
+          "signature": "fn structured_data_parse_rate(successfully_parsed: f64, successful_transmissions: f64) -> Option<f64>",
+          "formula": "successfully_parsed / successful_transmissions * 100",
+          "returns_none_when": "successful_transmissions == 0.0",
+          "example": { "input": [38000.0, 47500.0], "output": 80.0 }
+        }
+      ]
+    },
+    {
+      "name": "prom_completion_rate",
+      "path": "src/prom_completion_rate.rs",
+      "spec": "spec/prom-completion-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of eligible patients completing a patient-reported outcome measure, and the share completed via a digital channel.",
+      "functions": [
+        {
+          "name": "prom_completion_rate",
+          "signature": "fn prom_completion_rate(completed: f64, eligible: f64) -> Option<f64>",
+          "formula": "completed / eligible * 100",
+          "returns_none_when": "eligible == 0.0",
+          "example": { "input": [560.0, 800.0], "output": 70.0 }
+        },
+        {
+          "name": "digital_completion_share",
+          "signature": "fn digital_completion_share(completed_digitally: f64, completed: f64) -> Option<f64>",
+          "formula": "completed_digitally / completed * 100",
+          "returns_none_when": "completed == 0.0",
+          "example": { "input": [420.0, 560.0], "output": 75.0 }
+        }
+      ]
+    },
+    {
+      "name": "digital_therapeutic_retention_rate",
+      "path": "src/digital_therapeutic_retention_rate.rs",
+      "spec": "spec/digital-therapeutic-retention-rate.md",
+      "upstream_topic": false,
+      "summary": "Day-7 and day-30 retention rates for a digital therapeutic's enrolled patients.",
+      "functions": [
+        {
+          "name": "day_7_retention_rate",
+          "signature": "fn day_7_retention_rate(active_at_day_7: f64, enrolled: f64) -> Option<f64>",
+          "formula": "active_at_day_7 / enrolled * 100",
+          "returns_none_when": "enrolled == 0.0",
+          "example": { "input": [640.0, 1000.0], "output": 64.0 }
+        },
+        {
+          "name": "day_30_retention_rate",
+          "signature": "fn day_30_retention_rate(active_at_day_30: f64, enrolled: f64) -> Option<f64>",
+          "formula": "active_at_day_30 / enrolled * 100",
+          "returns_none_when": "enrolled == 0.0",
+          "example": { "input": [280.0, 1000.0], "output": 28.0 }
+        }
+      ]
+    },
+    {
+      "name": "clinical_alert_firing_rate",
+      "path": "src/clinical_alert_firing_rate.rs",
+      "spec": "spec/clinical-alert-firing-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of orders that trigger a clinical decision support alert, and the share of fired alerts that are high severity.",
+      "functions": [
+        {
+          "name": "alert_firing_rate",
+          "signature": "fn alert_firing_rate(alerts_fired: f64, orders_placed: f64) -> Option<f64>",
+          "formula": "alerts_fired / orders_placed * 100",
+          "returns_none_when": "orders_placed == 0.0",
+          "example": { "input": [4000.0, 10000.0], "output": 40.0 }
+        },
+        {
+          "name": "high_severity_firing_share",
+          "signature": "fn high_severity_firing_share(high_severity_alerts: f64, alerts_fired: f64) -> Option<f64>",
+          "formula": "high_severity_alerts / alerts_fired * 100",
+          "returns_none_when": "alerts_fired == 0.0",
+          "example": { "input": [500.0, 4000.0], "output": 12.5 }
+        }
+      ]
+    },
+    {
+      "name": "ehr_system_uptime_rate",
+      "path": "src/ehr_system_uptime_rate.rs",
+      "spec": "spec/ehr-system-uptime-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of a measurement period a system is available, and the share of downtime that was unplanned.",
+      "functions": [
+        {
+          "name": "uptime_rate",
+          "signature": "fn uptime_rate(uptime_minutes: f64, total_minutes: f64) -> Option<f64>",
+          "formula": "uptime_minutes / total_minutes * 100",
+          "returns_none_when": "total_minutes == 0.0",
+          "example": { "input": [39800.0, 40000.0], "output": 99.5 }
+        },
+        {
+          "name": "unplanned_downtime_share",
+          "signature": "fn unplanned_downtime_share(unplanned_downtime_minutes: f64, total_downtime_minutes: f64) -> Option<f64>",
+          "formula": "unplanned_downtime_minutes / total_downtime_minutes * 100",
+          "returns_none_when": "total_downtime_minutes == 0.0",
+          "example": { "input": [150.0, 200.0], "output": 75.0 }
+        }
+      ]
+    },
+    {
+      "name": "patient_identity_verification_rate",
+      "path": "src/patient_identity_verification_rate.rs",
+      "spec": "spec/patient-identity-verification-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of identity verification attempts that succeed, and the share requiring step-up verification.",
+      "functions": [
+        {
+          "name": "verification_success_rate",
+          "signature": "fn verification_success_rate(verified: f64, attempts: f64) -> Option<f64>",
+          "formula": "verified / attempts * 100",
+          "returns_none_when": "attempts == 0.0",
+          "example": { "input": [4250.0, 5000.0], "output": 85.0 }
+        },
+        {
+          "name": "step_up_verification_rate",
+          "signature": "fn step_up_verification_rate(step_up_required: f64, attempts: f64) -> Option<f64>",
+          "formula": "step_up_required / attempts * 100",
+          "returns_none_when": "attempts == 0.0",
+          "example": { "input": [750.0, 5000.0], "output": 15.0 }
+        }
+      ]
+    },
+    {
+      "name": "digital_referral_acceptance_rate",
+      "path": "src/digital_referral_acceptance_rate.rs",
+      "spec": "spec/digital-referral-acceptance-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of triaged referrals accepted and booked, and the share returned for missing information.",
+      "functions": [
+        {
+          "name": "acceptance_rate",
+          "signature": "fn acceptance_rate(accepted: f64, total_triaged: f64) -> Option<f64>",
+          "formula": "accepted / total_triaged * 100",
+          "returns_none_when": "total_triaged == 0.0",
+          "example": { "input": [780.0, 1000.0], "output": 78.0 }
+        },
+        {
+          "name": "returned_for_information_rate",
+          "signature": "fn returned_for_information_rate(returned: f64, total_triaged: f64) -> Option<f64>",
+          "formula": "returned / total_triaged * 100",
+          "returns_none_when": "total_triaged == 0.0",
+          "example": { "input": [150.0, 1000.0], "output": 15.0 }
+        }
+      ]
+    },
+    {
+      "name": "econsult_cost_avoidance",
+      "path": "src/econsult_cost_avoidance.rs",
+      "spec": "spec/econsult-cost-avoidance.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount of specialist visit and travel cost avoided by e-consults, netted against the platform's own operating cost.",
+      "functions": [
+        {
+          "name": "cost_avoided",
+          "signature": "fn cost_avoided(econsults_completed: u32, avoided_cost_per_consult: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "avoided_cost_per_consult * econsults_completed",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "econsults_completed": 400, "avoided_cost_per_consult": { "major_units": 120, "currency": "USD" } },
+            "output": { "major_units": 48000, "currency": "USD" }
+          }
+        },
+        {
+          "name": "net_savings",
+          "signature": "fn net_savings(cost_avoided: Money<'static, iso::Currency>, platform_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_avoided - platform_cost",
+          "returns_err_when": "the two arguments are denominated in different currencies (MoneyError::CurrencyMismatch)",
+          "example": {
+            "input": {
+              "cost_avoided": { "major_units": 48000, "currency": "USD" },
+              "platform_cost": { "major_units": 10000, "currency": "USD" }
+            },
+            "output": { "major_units": 38000, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "digital_intake_cost_savings",
+      "path": "src/digital_intake_cost_savings.rs",
+      "spec": "spec/digital-intake-cost-savings.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount of staff data-entry time saved by online intake forms, netted against the intake platform's own operating cost.",
+      "functions": [
+        {
+          "name": "staff_time_saved_cost",
+          "signature": "fn staff_time_saved_cost(forms_completed_online: u32, avoided_cost_per_form: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "avoided_cost_per_form * forms_completed_online",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "forms_completed_online": 1200, "avoided_cost_per_form": { "amount": "3.50", "currency": "USD" } },
+            "output": { "major_units": 4200, "currency": "USD" }
+          }
+        },
+        {
+          "name": "net_savings",
+          "signature": "fn net_savings(staff_time_saved_cost: Money<'static, iso::Currency>, platform_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "staff_time_saved_cost - platform_cost",
+          "returns_err_when": "the two arguments are denominated in different currencies (MoneyError::CurrencyMismatch)",
+          "example": {
+            "input": {
+              "staff_time_saved_cost": { "major_units": 4200, "currency": "USD" },
+              "platform_cost": { "major_units": 600, "currency": "USD" }
+            },
+            "output": { "major_units": 3600, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "duplicate_record_remediation_cost",
+      "path": "src/duplicate_record_remediation_cost.rs",
+      "spec": "spec/duplicate-record-remediation-cost.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount already spent resolving identified duplicate patient records, and the outstanding backlog cost.",
+      "functions": [
+        {
+          "name": "remediation_cost",
+          "signature": "fn remediation_cost(duplicates_resolved: u32, cost_per_resolution: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_per_resolution * duplicates_resolved",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "duplicates_resolved": 31500, "cost_per_resolution": { "major_units": 18, "currency": "USD" } },
+            "output": { "major_units": 567000, "currency": "USD" }
+          }
+        },
+        {
+          "name": "backlog_cost",
+          "signature": "fn backlog_cost(duplicates_unresolved: u32, cost_per_resolution: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_per_resolution * duplicates_unresolved",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "duplicates_unresolved": 10500, "cost_per_resolution": { "major_units": 18, "currency": "USD" } },
+            "output": { "major_units": 189000, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cpoe_cost_impact",
+      "path": "src/cpoe_cost_impact.rs",
+      "spec": "spec/cpoe-cost-impact.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount of transcription cost avoided by electronic orders, and the review cost incurred by verbal orders.",
+      "functions": [
+        {
+          "name": "transcription_cost_avoided",
+          "signature": "fn transcription_cost_avoided(electronic_orders: u32, avoided_cost_per_order: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "avoided_cost_per_order * electronic_orders",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "electronic_orders": 9400, "avoided_cost_per_order": { "major_units": 1, "currency": "USD" } },
+            "output": { "major_units": 9400, "currency": "USD" }
+          }
+        },
+        {
+          "name": "verbal_order_review_cost",
+          "signature": "fn verbal_order_review_cost(verbal_orders: u32, review_cost_per_order: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "review_cost_per_order * verbal_orders",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "verbal_orders": 500, "review_cost_per_order": { "major_units": 15, "currency": "USD" } },
+            "output": { "major_units": 7500, "currency": "USD" }
           }
         }
       ]

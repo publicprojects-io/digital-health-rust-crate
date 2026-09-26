@@ -6,7 +6,7 @@ description: Compute digital health KPIs — patient portal adoption, telehealth
 # Digital Health Metrics
 
 `digital-health` (this repository) is a Rust crate: one module per metric,
-each a small set of pure functions. Most take and return `f64`; four
+each a small set of pure functions. Most take and return `f64`; eight
 cost-and-revenue modules take `u32` counts and a
 [`rusty_money::Money`](https://docs.rs/rusty-money) amount instead (see
 "Reading the result" below for how the two differ). Full contracts live in
@@ -54,6 +54,34 @@ the right function and interpreting its result.
 | Share of identified duplicates that have been merged | `resolved_duplicate_rate` | `duplicate_patient_record_rate` |
 | Currency amount of staff time saved by self-scheduling | `staff_time_saved_cost` | `patient_self_scheduling_cost_savings` |
 | Staff time saved minus scheduling platform's own operating cost | `net_savings` | `patient_self_scheduling_cost_savings` |
+| Share of patients completing intake forms online | `intake_completion_rate` | `digital_intake_form_completion_rate` |
+| Share of online intake forms completed before arrival | `pre_visit_completion_rate` | `digital_intake_form_completion_rate` |
+| Time from e-consult submission to specialist response | `elapsed_hours` | `econsult_turnaround_time` |
+| Median or Nth-percentile e-consult response time | `percentile` | `econsult_turnaround_time` |
+| Share of admissions with completed medication reconciliation | `admission_reconciliation_rate` | `medication_reconciliation_rate` |
+| Share of discharges with completed medication reconciliation | `discharge_reconciliation_rate` | `medication_reconciliation_rate` |
+| Share of document exchanges that transmit successfully | `exchange_success_rate` | `interoperability_document_exchange_rate` |
+| Share of transmitted documents that parse into usable data | `structured_data_parse_rate` | `interoperability_document_exchange_rate` |
+| Share of eligible patients completing a PROM | `prom_completion_rate` | `prom_completion_rate` |
+| Share of PROMs completed via a digital channel | `digital_completion_share` | `prom_completion_rate` |
+| Digital therapeutic retention at day 7 | `day_7_retention_rate` | `digital_therapeutic_retention_rate` |
+| Digital therapeutic retention at day 30 | `day_30_retention_rate` | `digital_therapeutic_retention_rate` |
+| Share of orders that trigger a CDS alert | `alert_firing_rate` | `clinical_alert_firing_rate` |
+| Share of fired alerts that are high severity | `high_severity_firing_share` | `clinical_alert_firing_rate` |
+| Share of a measurement period a system is available | `uptime_rate` | `ehr_system_uptime_rate` |
+| Share of downtime that was unplanned | `unplanned_downtime_share` | `ehr_system_uptime_rate` |
+| Share of identity verification attempts that succeed | `verification_success_rate` | `patient_identity_verification_rate` |
+| Share of attempts requiring step-up verification | `step_up_verification_rate` | `patient_identity_verification_rate` |
+| Share of triaged referrals accepted and booked | `acceptance_rate` | `digital_referral_acceptance_rate` |
+| Share of referrals returned for missing information | `returned_for_information_rate` | `digital_referral_acceptance_rate` |
+| Currency amount avoided by e-consults replacing referrals | `cost_avoided` | `econsult_cost_avoidance` |
+| E-consult savings minus platform's own operating cost | `net_savings` | `econsult_cost_avoidance` |
+| Currency amount of staff time saved by online intake | `staff_time_saved_cost` | `digital_intake_cost_savings` |
+| Intake savings minus platform's own operating cost | `net_savings` | `digital_intake_cost_savings` |
+| Currency amount already spent resolving duplicate records | `remediation_cost` | `duplicate_record_remediation_cost` |
+| Currency amount of outstanding duplicate-record backlog | `backlog_cost` | `duplicate_record_remediation_cost` |
+| Currency amount of transcription cost avoided by CPOE | `transcription_cost_avoided` | `cpoe_cost_impact` |
+| Currency amount of verbal-order review cost incurred | `verbal_order_review_cost` | `cpoe_cost_impact` |
 
 ## Reading the result
 
@@ -74,9 +102,11 @@ match no_show_rate(180.0, 2_000.0) {
 }
 ```
 
-The four cost-and-revenue modules (`no_show_lost_revenue`,
+The eight cost-and-revenue modules (`no_show_lost_revenue`,
 `remote_patient_monitoring_billing_revenue`, `telehealth_cost_avoidance`,
-`patient_self_scheduling_cost_savings`) instead return
+`patient_self_scheduling_cost_savings`, `econsult_cost_avoidance`,
+`digital_intake_cost_savings`, `duplicate_record_remediation_cost`,
+`cpoe_cost_impact`) instead return
 `Result<Money<'static, iso::Currency>, rusty_money::MoneyError>` — each is a
 one-line call straight through to `rusty_money`'s own `Money::mul` or
 `Money::sub`, not a wrapper type. `Err` is not a zero-denominator condition
@@ -131,17 +161,23 @@ match lost_revenue(180, revenue_per_appointment) {
   algorithms — a stricter probabilistic matcher surfaces more candidate
   duplicates than a looser deterministic one, independent of true
   underlying data quality.
-- Eleven of the crate's sixteen modules —
-  `remote_patient_monitoring_adherence_rate`,
-  `secure_messaging_response_time`, `e_prescribing_transmission_accuracy`,
-  `cpoe_adoption_rate`, `telehealth_technical_failure_rate`,
-  `patient_self_scheduling_rate`, `duplicate_patient_record_rate`,
-  `no_show_lost_revenue`, `remote_patient_monitoring_billing_revenue`,
-  `telehealth_cost_avoidance`, `patient_self_scheduling_cost_savings` — are
-  not present in [Digital Health
+- `interoperability_document_exchange_rate`'s `exchange_success_rate` is a
+  transport-layer measure only — a document can transmit successfully and
+  still fail `structured_data_parse_rate`; don't infer usability from
+  transmission success.
+- `prom_completion_rate` alone doesn't establish that PROM data is
+  trustworthy — a high completion rate can still be skewed toward one
+  channel or population; check representativeness, not just the rate.
+- `cpoe_cost_impact`'s `transcription_cost_avoided` and
+  `verbal_order_review_cost` are not complementary and must not be netted
+  against each other — one is avoided cost, the other is incurred cost, for
+  different order types.
+- Most of this crate's modules are not present in [Digital Health
   Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
   and are sourced independently from general literature and standards
-  instead; each module's rustdoc `## Sources` section says exactly what.
+  instead; see [`spec/README.md`](../spec/README.md)'s file table (`Upstream
+  topic` column) for exactly which, and each such module's rustdoc `##
+  Sources` section for what it's sourced from.
 
 ## Further reading
 

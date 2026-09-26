@@ -1,15 +1,16 @@
 # Digital Health Rust crate
 
-Digital health metrics models, structs, calculations, and examples — 16
+Digital health metrics models, structs, calculations, and examples — 30
 modules covering patient engagement and access, digital care operations and
 safety, and cost and revenue. One module per topic. Five modules follow
 [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-directly; eleven more cover well-evidenced metrics not yet in that project,
-sourced independently (see each module's rustdoc `Sources` section).
+directly; twenty-five more cover well-evidenced metrics not yet in that
+project, sourced independently (see each module's rustdoc `Sources`
+section).
 
 Most modules are rate calculations: `f64` in, `Option<f64>` out, `None`
-wherever a denominator can be zero. The four cost-and-revenue modules
+wherever a denominator can be zero. The eight cost-and-revenue modules
 instead use [`rusty-money`](https://docs.rs/rusty-money) for currency-safe
 arithmetic: they take counts and a `Money` amount, and return
 `Result<Money, MoneyError>` rather than a plain `f64`, so a currency
@@ -21,7 +22,7 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-digital-health = "0.4"
+digital-health = "0.5"
 ```
 
 ## Quickstart
@@ -91,6 +92,14 @@ digital health business case.
 - `patient_self_scheduling_rate` — the natural continuation of
   `patient_portal_adoption_rate`'s funnel, and one of the levers
   `appointment_no_show_rate` itself points to
+- `digital_intake_form_completion_rate` — the digital front door before the
+  portal-adoption funnel even begins
+- `prom_completion_rate` — outcome data that's only trustworthy if the
+  completing population is representative of everyone treated
+- `digital_therapeutic_retention_rate` — day-7 versus day-30 retention, the
+  standard early-attrition checkpoints in digital therapeutics
+- `patient_identity_verification_rate` — the gate before
+  `patient_portal_adoption_rate`'s funnel starts at all
 
 ### Digital care operations and safety
 
@@ -107,6 +116,18 @@ digital health business case.
   override rate
 - `duplicate_patient_record_rate` — the silent failure mode behind
   interoperability, and a direct patient-safety risk in its own right
+- `econsult_turnaround_time` — the asynchronous-specialist-advice
+  counterpart to `digital_referral_turnaround_time`
+- `medication_reconciliation_rate` — one of the highest-yield digital
+  medication-safety checks in this crate
+- `interoperability_document_exchange_rate` — the gap between "the document
+  arrived" and "the data became usable"
+- `clinical_alert_firing_rate` — the other half of the alert-fatigue picture
+  from `clinical_alert_override_rate`
+- `ehr_system_uptime_rate` — the availability every other metric in this
+  crate implicitly assumes
+- `digital_referral_acceptance_rate` — what triage actually decides, not
+  just how fast it decides it
 
 ### Cost and revenue (`Money`, not `f64`)
 
@@ -120,6 +141,14 @@ digital health business case.
 - `patient_self_scheduling_cost_savings` — the currency amount behind
   `patient_self_scheduling_rate`, netted against the scheduling platform's
   own cost
+- `econsult_cost_avoidance` — the currency amount behind
+  `econsult_turnaround_time`'s avoided in-person referrals
+- `digital_intake_cost_savings` — the currency amount behind
+  `digital_intake_form_completion_rate`'s avoided manual data entry
+- `duplicate_record_remediation_cost` — the currency amount behind
+  `duplicate_patient_record_rate`'s resolved-versus-backlog split
+- `cpoe_cost_impact` — the staffing-cost case behind `cpoe_adoption_rate`'s
+  safety case
 
 ## Testing
 

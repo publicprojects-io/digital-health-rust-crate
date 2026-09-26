@@ -1,8 +1,10 @@
 # Adding a new metric module
 
 This is the human-readable walkthrough of the same steps
-[`AGENTS.md`](../../AGENTS.md) gives an AI agent. Follow it when adding an
-seventeenth topic alongside the crate's existing sixteen.
+[`AGENTS.md`](../../AGENTS.md) gives an AI agent. Follow it when adding a
+new topic alongside the crate's existing ones — see
+[`spec/README.md`](../../spec/README.md)'s file table for the current
+count and list.
 
 Most topics are `f64`-based (see the earlier tutorials); a topic centred on
 cost or revenue is `Money`-based instead, following

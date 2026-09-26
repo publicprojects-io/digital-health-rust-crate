@@ -43,9 +43,9 @@
 //! Five modules mirror a topic in [Digital Health
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 //! directly (each ends its rustdoc with a `Topic doc:` line to the upstream
-//! source); eleven more cover well-evidenced metrics not yet in that project
-//! (each ends with an `Independent topic:` line instead, and cites its own
-//! sources).
+//! source); twenty-five more cover well-evidenced metrics not yet in that
+//! project (each ends with an `Independent topic:` line instead, and cites
+//! its own sources).
 //!
 //! ### Patient engagement and access
 //!
@@ -63,6 +63,14 @@
 //! - [`patient_self_scheduling_rate`] — the natural continuation of
 //!   [`patient_portal_adoption_rate`]'s funnel, and one of the levers
 //!   [`appointment_no_show_rate`] itself points to
+//! - [`digital_intake_form_completion_rate`] — the digital front door before
+//!   the portal-adoption funnel even begins
+//! - [`prom_completion_rate`] — outcome data that's only trustworthy if the
+//!   completing population is representative of everyone treated
+//! - [`digital_therapeutic_retention_rate`] — day-7 versus day-30 retention,
+//!   the standard early-attrition checkpoints in digital therapeutics
+//! - [`patient_identity_verification_rate`] — the gate before
+//!   [`patient_portal_adoption_rate`]'s funnel starts at all
 //!
 //! ### Digital care operations and safety
 //!
@@ -79,6 +87,18 @@
 //!   rate that hides beneath a healthy override rate
 //! - [`duplicate_patient_record_rate`] — the silent failure mode behind
 //!   interoperability, and a direct patient-safety risk in its own right
+//! - [`econsult_turnaround_time`] — the asynchronous-specialist-advice
+//!   counterpart to [`digital_referral_turnaround_time`]
+//! - [`medication_reconciliation_rate`] — one of the highest-yield digital
+//!   medication-safety checks in this crate
+//! - [`interoperability_document_exchange_rate`] — the gap between "the
+//!   document arrived" and "the data became usable"
+//! - [`clinical_alert_firing_rate`] — the other half of the alert-fatigue
+//!   picture from [`clinical_alert_override_rate`]
+//! - [`ehr_system_uptime_rate`] — the availability every other metric in
+//!   this crate implicitly assumes
+//! - [`digital_referral_acceptance_rate`] — what triage actually decides,
+//!   not just how fast it decides it
 //!
 //! ### Cost and revenue
 //!
@@ -94,6 +114,14 @@
 //! - [`patient_self_scheduling_cost_savings`] — the currency amount behind
 //!   [`patient_self_scheduling_rate`], netted against the scheduling
 //!   platform's own cost
+//! - [`econsult_cost_avoidance`] — the currency amount behind
+//!   [`econsult_turnaround_time`]'s avoided in-person referrals
+//! - [`digital_intake_cost_savings`] — the currency amount behind
+//!   [`digital_intake_form_completion_rate`]'s avoided manual data entry
+//! - [`duplicate_record_remediation_cost`] — the currency amount behind
+//!   [`duplicate_patient_record_rate`]'s resolved-versus-backlog split
+//! - [`cpoe_cost_impact`] — the staffing-cost case behind
+//!   [`cpoe_adoption_rate`]'s safety case
 //!
 //! ## Testing
 //!
@@ -101,16 +129,30 @@
 //! every doc example compiles and asserts under `cargo test --doc`.
 
 pub mod appointment_no_show_rate;
+pub mod clinical_alert_firing_rate;
 pub mod clinical_alert_override_rate;
 pub mod cpoe_adoption_rate;
+pub mod cpoe_cost_impact;
+pub mod digital_intake_cost_savings;
+pub mod digital_intake_form_completion_rate;
+pub mod digital_referral_acceptance_rate;
 pub mod digital_referral_turnaround_time;
+pub mod digital_therapeutic_retention_rate;
 pub mod duplicate_patient_record_rate;
+pub mod duplicate_record_remediation_cost;
 pub mod e_prescribing_transmission_accuracy;
+pub mod econsult_cost_avoidance;
+pub mod econsult_turnaround_time;
+pub mod ehr_system_uptime_rate;
 mod internal;
+pub mod interoperability_document_exchange_rate;
+pub mod medication_reconciliation_rate;
 pub mod no_show_lost_revenue;
+pub mod patient_identity_verification_rate;
 pub mod patient_portal_adoption_rate;
 pub mod patient_self_scheduling_cost_savings;
 pub mod patient_self_scheduling_rate;
+pub mod prom_completion_rate;
 pub mod remote_patient_monitoring_adherence_rate;
 pub mod remote_patient_monitoring_billing_revenue;
 pub mod secure_messaging_response_time;

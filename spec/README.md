@@ -11,23 +11,37 @@ that content is written once and doesn't drift.
 
 Five specs mirror a topic in [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-directly; eleven more cover well-evidenced metrics not yet in that project.
-Each file's `Upstream topic` line says which. Four of the eleven independent
-specs are money-based (`Numeric type` column) — see `## Money convention`
-below.
+directly; twenty-five more cover well-evidenced metrics not yet in that
+project. Each file's `Upstream topic` line says which. Eight of the
+twenty-five independent specs are money-based (`Numeric type` column) — see
+`## Money convention` below.
 
 | Spec | Module | Upstream topic | Numeric type |
 | --- | --- | --- | --- |
 | [`appointment-no-show-rate.md`](appointment-no-show-rate.md) | [`src/appointment_no_show_rate.rs`](../src/appointment_no_show_rate.rs) | yes | `f64` |
+| [`clinical-alert-firing-rate.md`](clinical-alert-firing-rate.md) | [`src/clinical_alert_firing_rate.rs`](../src/clinical_alert_firing_rate.rs) | no | `f64` |
 | [`clinical-alert-override-rate.md`](clinical-alert-override-rate.md) | [`src/clinical_alert_override_rate.rs`](../src/clinical_alert_override_rate.rs) | yes | `f64` |
 | [`cpoe-adoption-rate.md`](cpoe-adoption-rate.md) | [`src/cpoe_adoption_rate.rs`](../src/cpoe_adoption_rate.rs) | no | `f64` |
+| [`cpoe-cost-impact.md`](cpoe-cost-impact.md) | [`src/cpoe_cost_impact.rs`](../src/cpoe_cost_impact.rs) | no | `Money` |
+| [`digital-intake-cost-savings.md`](digital-intake-cost-savings.md) | [`src/digital_intake_cost_savings.rs`](../src/digital_intake_cost_savings.rs) | no | `Money` |
+| [`digital-intake-form-completion-rate.md`](digital-intake-form-completion-rate.md) | [`src/digital_intake_form_completion_rate.rs`](../src/digital_intake_form_completion_rate.rs) | no | `f64` |
+| [`digital-referral-acceptance-rate.md`](digital-referral-acceptance-rate.md) | [`src/digital_referral_acceptance_rate.rs`](../src/digital_referral_acceptance_rate.rs) | no | `f64` |
 | [`digital-referral-turnaround-time.md`](digital-referral-turnaround-time.md) | [`src/digital_referral_turnaround_time.rs`](../src/digital_referral_turnaround_time.rs) | yes | `f64` |
+| [`digital-therapeutic-retention-rate.md`](digital-therapeutic-retention-rate.md) | [`src/digital_therapeutic_retention_rate.rs`](../src/digital_therapeutic_retention_rate.rs) | no | `f64` |
 | [`duplicate-patient-record-rate.md`](duplicate-patient-record-rate.md) | [`src/duplicate_patient_record_rate.rs`](../src/duplicate_patient_record_rate.rs) | no | `f64` |
+| [`duplicate-record-remediation-cost.md`](duplicate-record-remediation-cost.md) | [`src/duplicate_record_remediation_cost.rs`](../src/duplicate_record_remediation_cost.rs) | no | `Money` |
 | [`e-prescribing-transmission-accuracy.md`](e-prescribing-transmission-accuracy.md) | [`src/e_prescribing_transmission_accuracy.rs`](../src/e_prescribing_transmission_accuracy.rs) | no | `f64` |
+| [`econsult-cost-avoidance.md`](econsult-cost-avoidance.md) | [`src/econsult_cost_avoidance.rs`](../src/econsult_cost_avoidance.rs) | no | `Money` |
+| [`econsult-turnaround-time.md`](econsult-turnaround-time.md) | [`src/econsult_turnaround_time.rs`](../src/econsult_turnaround_time.rs) | no | `f64` |
+| [`ehr-system-uptime-rate.md`](ehr-system-uptime-rate.md) | [`src/ehr_system_uptime_rate.rs`](../src/ehr_system_uptime_rate.rs) | no | `f64` |
+| [`interoperability-document-exchange-rate.md`](interoperability-document-exchange-rate.md) | [`src/interoperability_document_exchange_rate.rs`](../src/interoperability_document_exchange_rate.rs) | no | `f64` |
+| [`medication-reconciliation-rate.md`](medication-reconciliation-rate.md) | [`src/medication_reconciliation_rate.rs`](../src/medication_reconciliation_rate.rs) | no | `f64` |
 | [`no-show-lost-revenue.md`](no-show-lost-revenue.md) | [`src/no_show_lost_revenue.rs`](../src/no_show_lost_revenue.rs) | no | `Money` |
+| [`patient-identity-verification-rate.md`](patient-identity-verification-rate.md) | [`src/patient_identity_verification_rate.rs`](../src/patient_identity_verification_rate.rs) | no | `f64` |
 | [`patient-portal-adoption-rate.md`](patient-portal-adoption-rate.md) | [`src/patient_portal_adoption_rate.rs`](../src/patient_portal_adoption_rate.rs) | yes | `f64` |
 | [`patient-self-scheduling-cost-savings.md`](patient-self-scheduling-cost-savings.md) | [`src/patient_self_scheduling_cost_savings.rs`](../src/patient_self_scheduling_cost_savings.rs) | no | `Money` |
 | [`patient-self-scheduling-rate.md`](patient-self-scheduling-rate.md) | [`src/patient_self_scheduling_rate.rs`](../src/patient_self_scheduling_rate.rs) | no | `f64` |
+| [`prom-completion-rate.md`](prom-completion-rate.md) | [`src/prom_completion_rate.rs`](../src/prom_completion_rate.rs) | no | `f64` |
 | [`remote-patient-monitoring-adherence-rate.md`](remote-patient-monitoring-adherence-rate.md) | [`src/remote_patient_monitoring_adherence_rate.rs`](../src/remote_patient_monitoring_adherence_rate.rs) | no | `f64` |
 | [`remote-patient-monitoring-billing-revenue.md`](remote-patient-monitoring-billing-revenue.md) | [`src/remote_patient_monitoring_billing_revenue.rs`](../src/remote_patient_monitoring_billing_revenue.rs) | no | `Money` |
 | [`secure-messaging-response-time.md`](secure-messaging-response-time.md) | [`src/secure_messaging_response_time.rs`](../src/secure_messaging_response_time.rs) | no | `f64` |
@@ -37,9 +51,9 @@ below.
 
 For the five upstream-backed specs, the formula and worked-example numbers
 are themselves sourced from the Digital Health Metrics project's topic
-docs. For the eleven independent specs, they're sourced from the general
-literature and standards cited in that module's rustdoc `## Sources`
-section — there is no upstream topic doc to check them against.
+docs. For the twenty-five independent specs, they're sourced from the
+general literature and standards cited in that module's rustdoc `##
+Sources` section — there is no upstream topic doc to check them against.
 
 ## Change process
 
@@ -60,8 +74,9 @@ module's rustdoc and don't require a spec change.
 - A function returns `Option<f64>` whenever any of its arguments is a
   denominator that can legitimately be zero; it returns `None` rather than
   producing `NaN` or `inf`.
-- No function panics. `digital_referral_turnaround_time::percentile` and
-  `secure_messaging_response_time::percentile` both delegate to a shared,
+- No function panics. `digital_referral_turnaround_time::percentile`,
+  `secure_messaging_response_time::percentile`, and
+  `econsult_turnaround_time::percentile` all delegate to a shared,
   crate-private `internal::percentile` helper that sorts with
   `f64::total_cmp` specifically so that NaN input cannot panic.
 - No function validates that a numerator is non-negative or `<=` its
@@ -70,7 +85,7 @@ module's rustdoc and don't require a spec change.
 
 ## Money convention
 
-`no_show_lost_revenue` and `remote_patient_monitoring_billing_revenue` are
+The eight `Money`-based modules (see the `Numeric type` column above) are
 the exception to "everything is `f64`": they take counts as `u32` and a
 concrete [`rusty_money::Money<'static,
 rusty_money::iso::Currency>`](https://docs.rs/rusty-money) amount, and

@@ -3,17 +3,17 @@
 > Rust crate of pure calculation functions for digital health KPIs —
 > patient engagement/access, digital care operations/safety, and cost and
 > revenue. Rate modules are `std`-only: `f64` in and out, `Option<f64>`
-> wherever a denominator can be zero. Four cost/revenue modules depend on
+> wherever a denominator can be zero. Eight cost/revenue modules depend on
 > `rusty-money`: `u32` counts and a `Money` amount in, `Result<Money,
 > MoneyError>` out.
 
 One module per metric topic. Five mirror a topic in the upstream [Digital
 Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-project directly; eleven more cover well-evidenced metrics not yet in that
-project, sourced independently. Every module has the same shape: what the
-metric is, how it's calculated, why it matters, a worked example that runs
-as a doctest, data sources and caveats, common pitfalls, and further
+project directly; twenty-five more cover well-evidenced metrics not yet in
+that project, sourced independently. Every module has the same shape: what
+the metric is, how it's calculated, why it matters, a worked example that
+runs as a doctest, data sources and caveats, common pitfalls, and further
 reading.
 
 ## Docs
@@ -42,6 +42,14 @@ reading.
   `technical_failure_rate`, `rebooking_rate`
 - [Patient self-scheduling rate](src/patient_self_scheduling_rate.rs):
   `self_scheduling_rate`, `same_day_self_scheduling_rate`
+- [Digital intake form completion rate](src/digital_intake_form_completion_rate.rs):
+  `intake_completion_rate`, `pre_visit_completion_rate`
+- [PROM completion rate](src/prom_completion_rate.rs):
+  `prom_completion_rate`, `digital_completion_share`
+- [Digital therapeutic retention rate](src/digital_therapeutic_retention_rate.rs):
+  `day_7_retention_rate`, `day_30_retention_rate`
+- [Patient identity verification rate](src/patient_identity_verification_rate.rs):
+  `verification_success_rate`, `step_up_verification_rate`
 - [Clinical alert override rate](src/clinical_alert_override_rate.rs):
   `override_rate`, `documented_override_rate`
 - [Digital referral turnaround time](src/digital_referral_turnaround_time.rs):
@@ -54,6 +62,18 @@ reading.
   `electronic_order_rate`, `verbal_order_rate`
 - [Duplicate patient record rate](src/duplicate_patient_record_rate.rs):
   `duplicate_record_rate`, `resolved_duplicate_rate`
+- [E-consult turnaround time](src/econsult_turnaround_time.rs):
+  `elapsed_hours`, `percentile`
+- [Medication reconciliation rate](src/medication_reconciliation_rate.rs):
+  `admission_reconciliation_rate`, `discharge_reconciliation_rate`
+- [Interoperability document exchange rate](src/interoperability_document_exchange_rate.rs):
+  `exchange_success_rate`, `structured_data_parse_rate`
+- [Clinical alert firing rate](src/clinical_alert_firing_rate.rs):
+  `alert_firing_rate`, `high_severity_firing_share`
+- [EHR system uptime rate](src/ehr_system_uptime_rate.rs):
+  `uptime_rate`, `unplanned_downtime_share`
+- [Digital referral acceptance rate](src/digital_referral_acceptance_rate.rs):
+  `acceptance_rate`, `returned_for_information_rate`
 - [No-show lost revenue](src/no_show_lost_revenue.rs) (`Money`, not `f64`):
   `lost_revenue`, `net_revenue_impact`
 - [Remote patient monitoring billing revenue](src/remote_patient_monitoring_billing_revenue.rs)
@@ -62,6 +82,14 @@ reading.
   `f64`): `cost_avoided`, `net_savings`
 - [Patient self-scheduling cost savings](src/patient_self_scheduling_cost_savings.rs)
   (`Money`, not `f64`): `staff_time_saved_cost`, `net_savings`
+- [E-consult cost avoidance](src/econsult_cost_avoidance.rs) (`Money`, not
+  `f64`): `cost_avoided`, `net_savings`
+- [Digital intake cost savings](src/digital_intake_cost_savings.rs) (`Money`,
+  not `f64`): `staff_time_saved_cost`, `net_savings`
+- [Duplicate record remediation cost](src/duplicate_record_remediation_cost.rs)
+  (`Money`, not `f64`): `remediation_cost`, `backlog_cost`
+- [CPOE cost impact](src/cpoe_cost_impact.rs) (`Money`, not `f64`):
+  `transcription_cost_avoided`, `verbal_order_review_cost`
 
 ## Optional
 
