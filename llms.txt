@@ -3,14 +3,14 @@
 > Rust crate of pure calculation functions for digital health KPIs —
 > patient engagement/access, digital care operations/safety, and cost and
 > revenue. Rate modules are `std`-only: `f64` in and out, `Option<f64>`
-> wherever a denominator can be zero. Two cost/revenue modules depend on
+> wherever a denominator can be zero. Three cost/revenue modules depend on
 > `rusty-money`: `u32` counts and a `Money` amount in, `Result<Money,
 > MoneyError>` out.
 
 One module per metric topic. Five mirror a topic in the upstream [Digital
 Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-project directly; five more cover well-evidenced metrics not yet in that
+project directly; eight more cover well-evidenced metrics not yet in that
 project, sourced independently. Every module has the same shape: what the
 metric is, how it's calculated, why it matters, a worked example that runs
 as a doctest, data sources and caveats, common pitfalls, and further
@@ -38,6 +38,8 @@ reading.
   `no_show_rate`, `late_cancellation_rate`, `combined_non_attendance_rate`
 - [Remote patient monitoring adherence rate](src/remote_patient_monitoring_adherence_rate.rs):
   `monitoring_adherence_rate`, `billing_threshold_met_rate`
+- [Telehealth technical failure rate](src/telehealth_technical_failure_rate.rs):
+  `technical_failure_rate`, `rebooking_rate`
 - [Clinical alert override rate](src/clinical_alert_override_rate.rs):
   `override_rate`, `documented_override_rate`
 - [Digital referral turnaround time](src/digital_referral_turnaround_time.rs):
@@ -46,10 +48,14 @@ reading.
   `response_hours`, `percentile`
 - [E-prescribing transmission accuracy](src/e_prescribing_transmission_accuracy.rs):
   `first_pass_transmission_rate`, `pharmacy_callback_rate`
+- [CPOE adoption rate](src/cpoe_adoption_rate.rs):
+  `electronic_order_rate`, `verbal_order_rate`
 - [No-show lost revenue](src/no_show_lost_revenue.rs) (`Money`, not `f64`):
   `lost_revenue`, `net_revenue_impact`
 - [Remote patient monitoring billing revenue](src/remote_patient_monitoring_billing_revenue.rs)
   (`Money`, not `f64`): `billable_revenue`, `revenue_at_risk`
+- [Telehealth cost avoidance](src/telehealth_cost_avoidance.rs) (`Money`, not
+  `f64`): `cost_avoided`, `net_savings`
 
 ## Optional
 

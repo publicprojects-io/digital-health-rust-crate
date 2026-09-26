@@ -43,7 +43,7 @@
 //! Five modules mirror a topic in [Digital Health
 //! Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 //! directly (each ends its rustdoc with a `Topic doc:` line to the upstream
-//! source); five more cover well-evidenced metrics not yet in that project
+//! source); eight more cover well-evidenced metrics not yet in that project
 //! (each ends with an `Independent topic:` line instead, and cites its own
 //! sources).
 //!
@@ -58,6 +58,8 @@
 //! - [`remote_patient_monitoring_adherence_rate`] — the metric that decides
 //!   whether a monitoring period is even billable, not just how engaged a
 //!   patient is
+//! - [`telehealth_technical_failure_rate`] — the metric behind [`telehealth_visit_rate`]'s
+//!   own warning against counting attempted rather than completed visits
 //!
 //! ### Digital care operations and safety
 //!
@@ -69,6 +71,9 @@
 //!   time, a well-documented driver of clinician burnout
 //! - [`e_prescribing_transmission_accuracy`] — the pharmacy call-back rate
 //!   that catches errors a clean network transmission can't
+//! - [`cpoe_adoption_rate`] — the precondition for
+//!   [`clinical_alert_override_rate`] to mean anything, and the verbal-order
+//!   rate that hides beneath a healthy override rate
 //!
 //! ### Cost and revenue
 //!
@@ -78,6 +83,9 @@
 //! - [`remote_patient_monitoring_billing_revenue`] — the currency amount
 //!   behind [`remote_patient_monitoring_adherence_rate`]'s cohort
 //!   billing-eligible rate
+//! - [`telehealth_cost_avoidance`] — the currency amount behind
+//!   [`telehealth_visit_rate`], netted against the platform cost of running
+//!   it
 //!
 //! ## Testing
 //!
@@ -86,6 +94,7 @@
 
 pub mod appointment_no_show_rate;
 pub mod clinical_alert_override_rate;
+pub mod cpoe_adoption_rate;
 pub mod digital_referral_turnaround_time;
 pub mod e_prescribing_transmission_accuracy;
 mod internal;
@@ -94,4 +103,6 @@ pub mod patient_portal_adoption_rate;
 pub mod remote_patient_monitoring_adherence_rate;
 pub mod remote_patient_monitoring_billing_revenue;
 pub mod secure_messaging_response_time;
+pub mod telehealth_cost_avoidance;
+pub mod telehealth_technical_failure_rate;
 pub mod telehealth_visit_rate;

@@ -2,7 +2,7 @@
 
 This is the human-readable walkthrough of the same steps
 [`AGENTS.md`](../../AGENTS.md) gives an AI agent. Follow it when adding an
-eleventh topic alongside the crate's existing ten.
+fourteenth topic alongside the crate's existing thirteen.
 
 Most topics are `f64`-based (see the earlier tutorials); a topic centred on
 cost or revenue is `Money`-based instead, following

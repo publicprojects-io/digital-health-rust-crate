@@ -1,16 +1,16 @@
 # Digital Health Rust crate
 
-Digital health metrics models, structs, calculations, and examples — 10
+Digital health metrics models, structs, calculations, and examples — 13
 modules covering patient engagement and access, digital care operations and
 safety, and cost and revenue. One module per topic. Five modules follow
 [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-directly; five more cover well-evidenced metrics not yet in that project,
+directly; eight more cover well-evidenced metrics not yet in that project,
 sourced independently (see each module's rustdoc `Sources` section).
 
 Most modules are rate calculations: `f64` in, `Option<f64>` out, `None`
-wherever a denominator can be zero. The two cost-and-revenue modules instead
-use [`rusty-money`](https://docs.rs/rusty-money) for currency-safe
+wherever a denominator can be zero. The three cost-and-revenue modules
+instead use [`rusty-money`](https://docs.rs/rusty-money) for currency-safe
 arithmetic: they take counts and a `Money` amount, and return
 `Result<Money, MoneyError>` rather than a plain `f64`, so a currency
 mismatch or overflow is a typed error instead of a silent rounding bug.
@@ -21,7 +21,7 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-digital-health = "0.2"
+digital-health = "0.3"
 ```
 
 ## Quickstart
@@ -85,6 +85,9 @@ digital health business case.
 - `remote_patient_monitoring_adherence_rate` — the metric that decides
   whether a monitoring period is even billable, not just how engaged a
   patient is
+- `telehealth_technical_failure_rate` — the metric behind
+  `telehealth_visit_rate`'s own warning against counting attempted rather
+  than completed visits
 
 ### Digital care operations and safety
 
@@ -96,6 +99,9 @@ digital health business case.
   a well-documented driver of clinician burnout
 - `e_prescribing_transmission_accuracy` — the pharmacy call-back rate that
   catches errors a clean network transmission can't
+- `cpoe_adoption_rate` — the precondition for `clinical_alert_override_rate`
+  to mean anything, and the verbal-order rate hiding beneath a healthy
+  override rate
 
 ### Cost and revenue (`Money`, not `f64`)
 
@@ -104,6 +110,8 @@ digital health business case.
   justified against
 - `remote_patient_monitoring_billing_revenue` — the currency amount behind
   `remote_patient_monitoring_adherence_rate`'s cohort billing-eligible rate
+- `telehealth_cost_avoidance` — the currency amount behind
+  `telehealth_visit_rate`, netted against the platform cost of running it
 
 ## Testing
 

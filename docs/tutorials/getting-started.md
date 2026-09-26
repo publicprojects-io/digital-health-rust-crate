@@ -10,7 +10,7 @@ third showing the crate's `Money`-based cost-and-revenue functions.
 
 ```toml
 [dependencies]
-digital-health = "0.2"
+digital-health = "0.3"
 ```
 
 ## The portal-adoption funnel and the no-show rate

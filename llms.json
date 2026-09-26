@@ -1,6 +1,6 @@
 {
   "name": "digital-health",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Digital health metrics models, structs, calculations, and examples.",
   "language": "rust",
   "edition": "2024",
@@ -20,7 +20,7 @@
       "panics": "none of the public functions panic",
       "default_illustrative_currency": "USD — a documentation convention only",
       "wrapping_policy": "each function is a one-line pass-through directly to rusty_money's own Money::mul/Money::sub, not a generic wrapper — no FormattableCurrency type parameter",
-      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue"]
+      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance"]
     }
   },
   "modules": [
@@ -301,6 +301,85 @@
           "example": {
             "input": { "non_eligible_patients": 120, "reimbursement_per_patient": { "major_units": 50, "currency": "USD" } },
             "output": { "major_units": 6000, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cpoe_adoption_rate",
+      "path": "src/cpoe_adoption_rate.rs",
+      "spec": "spec/cpoe-adoption-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of clinical orders placed electronically via CPOE, and the verbal-order rate that bypasses CPOE's safety checks entirely.",
+      "functions": [
+        {
+          "name": "electronic_order_rate",
+          "signature": "fn electronic_order_rate(electronic_orders: f64, total_orders: f64) -> Option<f64>",
+          "formula": "electronic_orders / total_orders * 100",
+          "returns_none_when": "total_orders == 0.0",
+          "example": { "input": [9400.0, 10000.0], "output": 94.0 }
+        },
+        {
+          "name": "verbal_order_rate",
+          "signature": "fn verbal_order_rate(verbal_orders: f64, total_orders: f64) -> Option<f64>",
+          "formula": "verbal_orders / total_orders * 100",
+          "returns_none_when": "total_orders == 0.0",
+          "example": { "input": [500.0, 10000.0], "output": 5.0 }
+        }
+      ]
+    },
+    {
+      "name": "telehealth_technical_failure_rate",
+      "path": "src/telehealth_technical_failure_rate.rs",
+      "spec": "spec/telehealth-technical-failure-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of attempted telehealth visits that fail to connect, and the share of those failures that are successfully rebooked.",
+      "functions": [
+        {
+          "name": "technical_failure_rate",
+          "signature": "fn technical_failure_rate(failed_attempts: f64, total_attempts: f64) -> Option<f64>",
+          "formula": "failed_attempts / total_attempts * 100",
+          "returns_none_when": "total_attempts == 0.0",
+          "example": { "input": [35.0, 500.0], "output": 7.0 }
+        },
+        {
+          "name": "rebooking_rate",
+          "signature": "fn rebooking_rate(rebooked_after_failure: f64, failed_attempts: f64) -> Option<f64>",
+          "formula": "rebooked_after_failure / failed_attempts * 100",
+          "returns_none_when": "failed_attempts == 0.0",
+          "example": { "input": [28.0, 35.0], "output": 80.0 }
+        }
+      ]
+    },
+    {
+      "name": "telehealth_cost_avoidance",
+      "path": "src/telehealth_cost_avoidance.rs",
+      "spec": "spec/telehealth-cost-avoidance.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Currency amount of travel and facility cost avoided by delivering a visit via telehealth, netted against the platform's own operating cost.",
+      "functions": [
+        {
+          "name": "cost_avoided",
+          "signature": "fn cost_avoided(telehealth_encounters: u32, avoided_cost_per_encounter: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "avoided_cost_per_encounter * telehealth_encounters",
+          "returns_err_when": "the multiplication overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "telehealth_encounters": 1600, "avoided_cost_per_encounter": { "major_units": 40, "currency": "USD" } },
+            "output": { "major_units": 64000, "currency": "USD" }
+          }
+        },
+        {
+          "name": "net_savings",
+          "signature": "fn net_savings(cost_avoided: Money<'static, iso::Currency>, platform_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_avoided - platform_cost",
+          "returns_err_when": "the two arguments are denominated in different currencies (MoneyError::CurrencyMismatch)",
+          "example": {
+            "input": {
+              "cost_avoided": { "major_units": 64000, "currency": "USD" },
+              "platform_cost": { "major_units": 18000, "currency": "USD" }
+            },
+            "output": { "major_units": 46000, "currency": "USD" }
           }
         }
       ]
