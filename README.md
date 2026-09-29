@@ -1,16 +1,16 @@
 # Digital Health Rust crate
 
-Digital health metrics models, structs, calculations, and examples — 30
+Digital health metrics models, structs, calculations, and examples — 55
 modules covering patient engagement and access, digital care operations and
 safety, and cost and revenue. One module per topic. Five modules follow
 [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
-directly; twenty-five more cover well-evidenced metrics not yet in that
+directly; fifty more cover well-evidenced metrics not yet in that
 project, sourced independently (see each module's rustdoc `Sources`
 section).
 
 Most modules are rate calculations: `f64` in, `Option<f64>` out, `None`
-wherever a denominator can be zero. The eight cost-and-revenue modules
+wherever a denominator can be zero. The thirteen cost-and-revenue modules
 instead use [`rusty-money`](https://docs.rs/rusty-money) for currency-safe
 arithmetic: they take counts and a `Money` amount, and return
 `Result<Money, MoneyError>` rather than a plain `f64`, so a currency
@@ -100,6 +100,24 @@ digital health business case.
   standard early-attrition checkpoints in digital therapeutics
 - `patient_identity_verification_rate` — the gate before
   `patient_portal_adoption_rate`'s funnel starts at all
+- `net_promoter_score` — the single-number satisfaction measure for
+  telehealth and app experience, and the response rate that qualifies it
+- `digital_access_rate` — the equity precondition for everything in this
+  theme: who can reach a digital service at all, and how unevenly
+- `patient_acquisition_efficiency` — whether growth spending pays back, via
+  LTV-to-CAC and marketing efficiency ratios
+- `engagement_consistency_rate` — how steadily patients keep using a tool,
+  and the dropout that ends it
+- `digital_literacy_rate` — whether patients can actually use a service they
+  have access to, measured by unassisted completion
+- `medication_adherence_rate` — proportion of days covered and the share of
+  patients reaching the 80% adherence threshold
+- `active_user_rate` — who shows up, and how often: active users and DAU/MAU
+  stickiness
+- `long_term_retention_rate` — day-60 and day-90 retention, where clinical
+  benefit is decided
+- `system_usability_scale` — the standard 10-item usability score for patients
+  and providers
 
 ### Digital care operations and safety
 
@@ -128,6 +146,26 @@ digital health business case.
   crate implicitly assumes
 - `digital_referral_acceptance_rate` — what triage actually decides, not
   just how fast it decides it
+- `triage_accuracy_rate` — whether a digital triage tool routes patients to
+  the right care level, and the under-triage that carries the safety risk
+- `readmission_rate` — the outcome payers accept as proof a digital
+  programme improved care, and its relative reduction
+- `clinician_documentation_time` — the paperwork burden behind clinician
+  burnout, per encounter and as a reduction
+- `biometric_improvement` — the clinical proof point: relative fall in
+  HbA1c or BMI, target attainment, and estimated A1c from mean glucose
+- `device_health_rate` — device uptime, data transmission success, and
+  resource saturation behind every monitoring programme
+- `biometric_stabilization` — blood pressure control and glucose time in range
+  from connected devices
+- `virtual_ward_bed_days` — the hospital bed days saved by moving recovery
+  into a virtual ward
+- `time_to_intervention` — how fast a clinical team acts on an automated
+  alert, not just that it fired
+- `ed_diversion_rate` — avoided emergency department visits, and how many were
+  safely avoided
+- `re_aim_framework` — Reach, Adoption, Implementation and Maintenance from
+  the RE-AIM evaluation framework
 
 ### Cost and revenue (`Money`, not `f64`)
 
@@ -149,6 +187,18 @@ digital health business case.
   `duplicate_patient_record_rate`'s resolved-versus-backlog split
 - `cpoe_cost_impact` — the staffing-cost case behind `cpoe_adoption_rate`'s
   safety case
+- `patient_acquisition_cost` — the fully loaded cost of acquiring a
+  patient, the denominator `patient_acquisition_efficiency` needs
+- `bed_day_cost_avoidance` — the currency amount behind
+  `virtual_ward_bed_days`, netted against the virtual ward's cost
+- `ed_diversion_cost_avoidance` — the currency amount behind
+  `ed_diversion_rate`'s safely avoided visits
+- `episode_cost_reduction` — cost per episode of care against a baseline
+  cohort, the unit value-based contracts use
+- `platform_investment_cost` — the fully loaded licensing, hardware and
+  staffing cost `return_on_investment` needs
+- `return_on_investment` — ROI and benefit-cost ratio, the payback question
+  every budget holder asks
 
 ## Testing
 

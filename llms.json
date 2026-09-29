@@ -16,11 +16,11 @@
     },
     "money_modules": {
       "numeric_type": "u32 counts in, rusty_money::Money<'static, rusty_money::iso::Currency> in and out",
-      "fallible_return": "Result<Money, rusty_money::MoneyError> — Err on currency mismatch or overflow, never on a zero count",
+      "fallible_return": "Result<Money, rusty_money::MoneyError> — Err on currency mismatch or overflow, never on a zero count — except patient_acquisition_cost::cost_per_new_patient and episode_cost_reduction::cost_per_episode, which divide by a count and return Err(DivisionByZero) when it is zero",
       "panics": "none of the public functions panic",
       "default_illustrative_currency": "USD — a documentation convention only",
-      "wrapping_policy": "each function is a one-line pass-through directly to rusty_money's own Money::mul/Money::sub, not a generic wrapper — no FormattableCurrency type parameter",
-      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance", "patient_self_scheduling_cost_savings", "econsult_cost_avoidance", "digital_intake_cost_savings", "duplicate_record_remediation_cost", "cpoe_cost_impact"]
+      "wrapping_policy": "each function is a one-line pass-through directly to rusty_money's own Money::mul/Money::sub/Money::add/Money::div, not a generic wrapper — no FormattableCurrency type parameter",
+      "modules": ["no_show_lost_revenue", "remote_patient_monitoring_billing_revenue", "telehealth_cost_avoidance", "patient_self_scheduling_cost_savings", "econsult_cost_avoidance", "digital_intake_cost_savings", "duplicate_record_remediation_cost", "cpoe_cost_impact", "patient_acquisition_cost", "bed_day_cost_avoidance", "ed_diversion_cost_avoidance", "episode_cost_reduction", "platform_investment_cost"]
     }
   },
   "modules": [
@@ -818,6 +818,651 @@
           "example": {
             "input": { "verbal_orders": 500, "review_cost_per_order": { "major_units": 15, "currency": "USD" } },
             "output": { "major_units": 7500, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "triage_accuracy_rate",
+      "path": "src/triage_accuracy_rate.rs",
+      "spec": "spec/triage-accuracy-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of digital triage decisions matching a clinician reference standard, and the share routed to a lower care level than needed.",
+      "functions": [
+        {
+          "name": "triage_accuracy_rate",
+          "signature": "fn triage_accuracy_rate(matching_reference: f64, reviewed: f64) -> Option<f64>",
+          "formula": "matching_reference / reviewed * 100",
+          "returns_none_when": "reviewed == 0.0",
+          "example": { "input": [870.0, 1000.0], "output": 87.0 }
+        },
+        {
+          "name": "under_triage_rate",
+          "signature": "fn under_triage_rate(under_triaged: f64, reviewed: f64) -> Option<f64>",
+          "formula": "under_triaged / reviewed * 100",
+          "returns_none_when": "reviewed == 0.0",
+          "example": { "input": [60.0, 1000.0], "output": 6.0 }
+        }
+      ]
+    },
+    {
+      "name": "readmission_rate",
+      "path": "src/readmission_rate.rs",
+      "spec": "spec/readmission-rate.md",
+      "upstream_topic": false,
+      "summary": "30-day unplanned readmission rate for index discharges, and its relative reduction against a baseline.",
+      "functions": [
+        {
+          "name": "readmission_rate",
+          "signature": "fn readmission_rate(readmissions: f64, index_discharges: f64) -> Option<f64>",
+          "formula": "readmissions / index_discharges * 100",
+          "returns_none_when": "index_discharges == 0.0",
+          "example": { "input": [400.0, 2500.0], "output": 16.0 }
+        },
+        {
+          "name": "readmission_reduction",
+          "signature": "fn readmission_reduction(baseline_rate: f64, current_rate: f64) -> Option<f64>",
+          "formula": "(baseline_rate - current_rate) / baseline_rate * 100",
+          "returns_none_when": "baseline_rate == 0.0",
+          "example": { "input": [16.0, 13.6], "output": 15.0 }
+        }
+      ]
+    },
+    {
+      "name": "net_promoter_score",
+      "path": "src/net_promoter_score.rs",
+      "spec": "spec/net-promoter-score.md",
+      "upstream_topic": false,
+      "summary": "Net Promoter Score (−100 to +100, not a 0–100 share) and the survey response rate that qualifies it.",
+      "functions": [
+        {
+          "name": "net_promoter_score",
+          "signature": "fn net_promoter_score(promoters: f64, detractors: f64, respondents: f64) -> Option<f64>",
+          "formula": "(promoters - detractors) / respondents * 100",
+          "returns_none_when": "respondents == 0.0",
+          "example": { "input": [600.0, 150.0, 1000.0], "output": 45.0 }
+        },
+        {
+          "name": "survey_response_rate",
+          "signature": "fn survey_response_rate(respondents: f64, invited: f64) -> Option<f64>",
+          "formula": "respondents / invited * 100",
+          "returns_none_when": "invited == 0.0",
+          "example": { "input": [1000.0, 4000.0], "output": 25.0 }
+        }
+      ]
+    },
+    {
+      "name": "digital_access_rate",
+      "path": "src/digital_access_rate.rs",
+      "spec": "spec/digital-access-rate.md",
+      "upstream_topic": false,
+      "summary": "Share of a population with connectivity or device access, and a subgroup's access parity ratio against a reference group (a ratio, not a percentage).",
+      "functions": [
+        {
+          "name": "digital_access_rate",
+          "signature": "fn digital_access_rate(with_access: f64, population: f64) -> Option<f64>",
+          "formula": "with_access / population * 100",
+          "returns_none_when": "population == 0.0",
+          "example": { "input": [8400.0, 12000.0], "output": 70.0 }
+        },
+        {
+          "name": "access_parity_ratio",
+          "signature": "fn access_parity_ratio(group_rate: f64, reference_rate: f64) -> Option<f64>",
+          "formula": "group_rate / reference_rate",
+          "returns_none_when": "reference_rate == 0.0",
+          "example": { "input": [60.0, 80.0], "output": 0.75 }
+        }
+      ]
+    },
+    {
+      "name": "clinician_documentation_time",
+      "path": "src/clinician_documentation_time.rs",
+      "spec": "spec/clinician-documentation-time.md",
+      "upstream_topic": false,
+      "summary": "Average clinician EHR documentation minutes per encounter, and its relative reduction against a baseline.",
+      "functions": [
+        {
+          "name": "documentation_minutes_per_encounter",
+          "signature": "fn documentation_minutes_per_encounter(documentation_minutes: f64, encounters: f64) -> Option<f64>",
+          "formula": "documentation_minutes / encounters",
+          "returns_none_when": "encounters == 0.0",
+          "example": { "input": [240000.0, 12000.0], "output": 20.0 }
+        },
+        {
+          "name": "documentation_time_reduction",
+          "signature": "fn documentation_time_reduction(baseline_minutes: f64, current_minutes: f64) -> Option<f64>",
+          "formula": "(baseline_minutes - current_minutes) / baseline_minutes * 100",
+          "returns_none_when": "baseline_minutes == 0.0",
+          "example": { "input": [20.0, 15.0], "output": 25.0 }
+        }
+      ]
+    },
+    {
+      "name": "patient_acquisition_efficiency",
+      "path": "src/patient_acquisition_efficiency.rs",
+      "spec": "spec/patient-acquisition-efficiency.md",
+      "upstream_topic": false,
+      "summary": "LTV-to-CAC ratio and marketing efficiency ratio (MER); both plain ratios, not percentages.",
+      "functions": [
+        {
+          "name": "ltv_to_cac_ratio",
+          "signature": "fn ltv_to_cac_ratio(lifetime_value: f64, acquisition_cost: f64) -> Option<f64>",
+          "formula": "lifetime_value / acquisition_cost",
+          "returns_none_when": "acquisition_cost == 0.0",
+          "example": { "input": [1500.0, 500.0], "output": 3.0 }
+        },
+        {
+          "name": "marketing_efficiency_ratio",
+          "signature": "fn marketing_efficiency_ratio(total_revenue: f64, total_marketing_spend: f64) -> Option<f64>",
+          "formula": "total_revenue / total_marketing_spend",
+          "returns_none_when": "total_marketing_spend == 0.0",
+          "example": { "input": [900000.0, 300000.0], "output": 3.0 }
+        }
+      ]
+    },
+    {
+      "name": "patient_acquisition_cost",
+      "path": "src/patient_acquisition_cost.rs",
+      "spec": "spec/patient-acquisition-cost.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Fully loaded patient acquisition cost — ad spend, agency fees, technology cost and intake labour summed — and the cost per new patient.",
+      "functions": [
+        {
+          "name": "total_acquisition_cost",
+          "signature": "fn total_acquisition_cost(ad_spend: Money<'static, iso::Currency>, agency_fees: Money<'static, iso::Currency>, technology_cost: Money<'static, iso::Currency>, intake_labor_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "ad_spend + agency_fees + technology_cost + intake_labor_cost",
+          "returns_err_when": "the currencies differ (MoneyError::CurrencyMismatch) or the sum overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "ad_spend": { "major_units": 40000, "currency": "USD" }, "agency_fees": { "major_units": 8000, "currency": "USD" }, "technology_cost": { "major_units": 6000, "currency": "USD" }, "intake_labor_cost": { "major_units": 16000, "currency": "USD" } },
+            "output": { "major_units": 70000, "currency": "USD" }
+          }
+        },
+        {
+          "name": "cost_per_new_patient",
+          "signature": "fn cost_per_new_patient(total_acquisition_cost: Money<'static, iso::Currency>, new_patients: u32) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "total_acquisition_cost / new_patients",
+          "returns_err_when": "new_patients == 0 (MoneyError::DivisionByZero) or the division overflows (MoneyError::Overflow)",
+          "example": {
+            "input": { "total_acquisition_cost": { "major_units": 70000, "currency": "USD" }, "new_patients": 140 },
+            "output": { "major_units": 500, "currency": "USD" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "biometric_improvement",
+      "path": "src/biometric_improvement.rs",
+      "spec": "spec/biometric-improvement.md",
+      "upstream_topic": false,
+      "summary": "Biometric improvement measures whether a digital programme moves a clinical marker in the right direction: the relative fall in a value such as `HbA1c` or BMI against baseline, the share of patients reaching a clinical target, and the estimated A1c (eA1c) implied by a mean glucose reading from a CGM or meter.",
+      "functions": [
+        {
+          "name": "estimated_a1c",
+          "signature": "fn estimated_a1c(mean_glucose_mg_dl: f64) -> f64",
+          "formula": "(mean_glucose_mg_dl + 46.7) / 28.7",
+          "returns_none_when": "never — there is no denominator",
+          "example": { "input": [154.2], "output": 7.0 }
+        },
+        {
+          "name": "biometric_reduction",
+          "signature": "fn biometric_reduction(baseline: f64, current: f64) -> Option<f64>",
+          "formula": "(baseline - current) / baseline * 100",
+          "returns_none_when": "baseline == 0.0",
+          "example": { "input": [9.0, 7.65], "output": 15.0 }
+        },
+        {
+          "name": "target_attainment_rate",
+          "signature": "fn target_attainment_rate(at_target: f64, measured: f64) -> Option<f64>",
+          "formula": "at_target / measured * 100",
+          "returns_none_when": "measured == 0.0",
+          "example": { "input": [420.0, 600.0], "output": 70.0 }
+        }
+      ]
+    },
+    {
+      "name": "medication_adherence_rate",
+      "path": "src/medication_adherence_rate.rs",
+      "spec": "spec/medication-adherence-rate.md",
+      "upstream_topic": false,
+      "summary": "Medication adherence rate measures whether patients take prescribed medication as directed.",
+      "functions": [
+        {
+          "name": "proportion_of_days_covered",
+          "signature": "fn proportion_of_days_covered(days_covered: f64, days_in_period: f64) -> Option<f64>",
+          "formula": "days_covered / days_in_period * 100",
+          "returns_none_when": "days_in_period == 0.0",
+          "example": { "input": [72.0, 90.0], "output": 80.0 }
+        },
+        {
+          "name": "adherent_patient_rate",
+          "signature": "fn adherent_patient_rate(adherent_patients: f64, patients: f64) -> Option<f64>",
+          "formula": "adherent_patients / patients * 100",
+          "returns_none_when": "patients == 0.0",
+          "example": { "input": [560.0, 800.0], "output": 70.0 }
+        }
+      ]
+    },
+    {
+      "name": "digital_literacy_rate",
+      "path": "src/digital_literacy_rate.rs",
+      "spec": "spec/digital-literacy-rate.md",
+      "upstream_topic": false,
+      "summary": "Digital literacy rate measures whether patients can actually use a digital health service: the share of attempted telehealth or portal tasks completed unassisted, and the share needing help.",
+      "functions": [
+        {
+          "name": "unassisted_completion_rate",
+          "signature": "fn unassisted_completion_rate(completed_unassisted: f64, attempted: f64) -> Option<f64>",
+          "formula": "completed_unassisted / attempted * 100",
+          "returns_none_when": "attempted == 0.0",
+          "example": { "input": [640.0, 800.0], "output": 80.0 }
+        },
+        {
+          "name": "assistance_rate",
+          "signature": "fn assistance_rate(needed_assistance: f64, attempted: f64) -> Option<f64>",
+          "formula": "needed_assistance / attempted * 100",
+          "returns_none_when": "attempted == 0.0",
+          "example": { "input": [120.0, 800.0], "output": 15.0 }
+        }
+      ]
+    },
+    {
+      "name": "device_health_rate",
+      "path": "src/device_health_rate.rs",
+      "spec": "spec/device-health-rate.md",
+      "upstream_topic": false,
+      "summary": "Device health rate covers the hardware layer beneath a digital health programme — connected wearables, home hubs, and clinic devices: how much of the expected time a device was up, how much of the expected data actually arrived over the carrier or VPN link, and how often CPU or memory sat above a saturation threshold.",
+      "functions": [
+        {
+          "name": "device_uptime_rate",
+          "signature": "fn device_uptime_rate(uptime_hours: f64, expected_hours: f64) -> Option<f64>",
+          "formula": "uptime_hours / expected_hours * 100",
+          "returns_none_when": "expected_hours == 0.0",
+          "example": { "input": [2138.4, 2160.0], "output": 99.0 }
+        },
+        {
+          "name": "data_transmission_success_rate",
+          "signature": "fn data_transmission_success_rate(received: f64, expected: f64) -> Option<f64>",
+          "formula": "received / expected * 100",
+          "returns_none_when": "expected == 0.0",
+          "example": { "input": [9600.0, 10000.0], "output": 96.0 }
+        },
+        {
+          "name": "resource_saturation_rate",
+          "signature": "fn resource_saturation_rate(samples_above_threshold: f64, samples: f64) -> Option<f64>",
+          "formula": "samples_above_threshold / samples * 100",
+          "returns_none_when": "samples == 0.0",
+          "example": { "input": [180.0, 3600.0], "output": 5.0 }
+        }
+      ]
+    },
+    {
+      "name": "engagement_consistency_rate",
+      "path": "src/engagement_consistency_rate.rs",
+      "spec": "spec/engagement-consistency-rate.md",
+      "upstream_topic": false,
+      "summary": "Engagement consistency rate tracks how steadily patients keep using a digital tool over time: the share of enrolled weeks in which a patient was active (logging food, activity, or viewing their health stats), and the dropout rate — the share of enrolled patients who stop engaging.",
+      "functions": [
+        {
+          "name": "active_week_rate",
+          "signature": "fn active_week_rate(active_weeks: f64, enrolled_weeks: f64) -> Option<f64>",
+          "formula": "active_weeks / enrolled_weeks * 100",
+          "returns_none_when": "enrolled_weeks == 0.0",
+          "example": { "input": [312.0, 480.0], "output": 65.0 }
+        },
+        {
+          "name": "dropout_rate",
+          "signature": "fn dropout_rate(dropouts: f64, enrolled: f64) -> Option<f64>",
+          "formula": "dropouts / enrolled * 100",
+          "returns_none_when": "enrolled == 0.0",
+          "example": { "input": [180.0, 1200.0], "output": 15.0 }
+        }
+      ]
+    },
+    {
+      "name": "biometric_stabilization",
+      "path": "src/biometric_stabilization.rs",
+      "spec": "spec/biometric-stabilization.md",
+      "upstream_topic": false,
+      "summary": "Biometric stabilization measures how many patients a connected device keeps within a clinical target range: the share of monitored patients whose blood pressure is controlled (under 130/80 mmHg via a cellular cuff, for example), and the share of individual readings that fall in range — for continuous glucose monitoring, time in range.",
+      "functions": [
+        {
+          "name": "blood_pressure_control_rate",
+          "signature": "fn blood_pressure_control_rate(controlled: f64, monitored: f64) -> Option<f64>",
+          "formula": "controlled / monitored * 100",
+          "returns_none_when": "monitored == 0.0",
+          "example": { "input": [540.0, 900.0], "output": 60.0 }
+        },
+        {
+          "name": "time_in_range",
+          "signature": "fn time_in_range(readings_in_range: f64, readings: f64) -> Option<f64>",
+          "formula": "readings_in_range / readings * 100",
+          "returns_none_when": "readings == 0.0",
+          "example": { "input": [8400.0, 12000.0], "output": 70.0 }
+        }
+      ]
+    },
+    {
+      "name": "virtual_ward_bed_days",
+      "path": "src/virtual_ward_bed_days.rs",
+      "spec": "spec/virtual-ward-bed-days.md",
+      "upstream_topic": false,
+      "summary": "Virtual ward bed days measures the hospital bed days saved by moving part of a patient's stay — post-surgical recovery, for example — into a virtual ward with remote monitoring, and the relative reduction in bed days against a baseline.",
+      "functions": [
+        {
+          "name": "bed_days_saved",
+          "signature": "fn bed_days_saved(patients: f64, conventional_stay_days: f64, actual_stay_days: f64) -> f64",
+          "formula": "patients * (conventional_stay_days - actual_stay_days)",
+          "returns_none_when": "never — there is no denominator",
+          "example": { "input": [200.0, 6.0, 4.5], "output": 300.0 }
+        },
+        {
+          "name": "bed_day_reduction_rate",
+          "signature": "fn bed_day_reduction_rate(baseline_bed_days: f64, current_bed_days: f64) -> Option<f64>",
+          "formula": "(baseline_bed_days - current_bed_days) / baseline_bed_days * 100",
+          "returns_none_when": "baseline_bed_days == 0.0",
+          "example": { "input": [1200.0, 900.0], "output": 25.0 }
+        }
+      ]
+    },
+    {
+      "name": "active_user_rate",
+      "path": "src/active_user_rate.rs",
+      "spec": "spec/active-user-rate.md",
+      "upstream_topic": false,
+      "summary": "Active user rate is the baseline engagement measure for a digital care portal or app: the share of enrolled users active in a period (weekly for WAU, daily for DAU), and the stickiness ratio — daily active users as a share of monthly active users.",
+      "functions": [
+        {
+          "name": "active_user_rate",
+          "signature": "fn active_user_rate(active_users: f64, enrolled_users: f64) -> Option<f64>",
+          "formula": "active_users / enrolled_users * 100",
+          "returns_none_when": "enrolled_users == 0.0",
+          "example": { "input": [3200.0, 8000.0], "output": 40.0 }
+        },
+        {
+          "name": "stickiness_ratio",
+          "signature": "fn stickiness_ratio(daily_active_users: f64, monthly_active_users: f64) -> Option<f64>",
+          "formula": "daily_active_users / monthly_active_users * 100",
+          "returns_none_when": "monthly_active_users == 0.0",
+          "example": { "input": [1800.0, 6000.0], "output": 30.0 }
+        }
+      ]
+    },
+    {
+      "name": "long_term_retention_rate",
+      "path": "src/long_term_retention_rate.rs",
+      "spec": "spec/long-term-retention-rate.md",
+      "upstream_topic": false,
+      "summary": "Long-term retention rate is the share of an enrolment cohort still interacting with a digital intervention at day 60 and day 90 — the extension of the day-7 and day-30 checkpoints in digital therapeutic retention rate to the horizons where clinical benefit is decided.",
+      "functions": [
+        {
+          "name": "day_60_retention_rate",
+          "signature": "fn day_60_retention_rate(retained_at_day_60: f64, cohort: f64) -> Option<f64>",
+          "formula": "retained_at_day_60 / cohort * 100",
+          "returns_none_when": "cohort == 0.0",
+          "example": { "input": [540.0, 1000.0], "output": 54.0 }
+        },
+        {
+          "name": "day_90_retention_rate",
+          "signature": "fn day_90_retention_rate(retained_at_day_90: f64, cohort: f64) -> Option<f64>",
+          "formula": "retained_at_day_90 / cohort * 100",
+          "returns_none_when": "cohort == 0.0",
+          "example": { "input": [410.0, 1000.0], "output": 41.0 }
+        }
+      ]
+    },
+    {
+      "name": "ed_diversion_rate",
+      "path": "src/ed_diversion_rate.rs",
+      "spec": "spec/ed-diversion-rate.md",
+      "upstream_topic": false,
+      "summary": "Emergency department (ED) diversion rate is the share of virtual-triage contacts that end in avoided ED visits — patients who would otherwise have attended and were safely directed to a lower-acuity route — and the safe diversion rate, the share of diverted patients who did not return to an ED soon after.",
+      "functions": [
+        {
+          "name": "ed_diversion_rate",
+          "signature": "fn ed_diversion_rate(diverted_contacts: f64, triage_contacts: f64) -> Option<f64>",
+          "formula": "diverted_contacts / triage_contacts * 100",
+          "returns_none_when": "triage_contacts == 0.0",
+          "example": { "input": [1250.0, 5000.0], "output": 25.0 }
+        },
+        {
+          "name": "safe_diversion_rate",
+          "signature": "fn safe_diversion_rate(diverted_without_return: f64, diverted_contacts: f64) -> Option<f64>",
+          "formula": "diverted_without_return / diverted_contacts * 100",
+          "returns_none_when": "diverted_contacts == 0.0",
+          "example": { "input": [1150.0, 1250.0], "output": 92.0 }
+        }
+      ]
+    },
+    {
+      "name": "return_on_investment",
+      "path": "src/return_on_investment.rs",
+      "spec": "spec/return-on-investment.md",
+      "upstream_topic": false,
+      "summary": "Return on investment (ROI) for a digital health platform compares quantifiable benefit — cost savings and revenue — with the total cost of licensing, hardware deployment, and staffing.",
+      "functions": [
+        {
+          "name": "roi_percent",
+          "signature": "fn roi_percent(total_benefit: f64, total_cost: f64) -> Option<f64>",
+          "formula": "(total_benefit - total_cost) / total_cost * 100",
+          "returns_none_when": "total_cost == 0.0",
+          "example": { "input": [450000.0, 300000.0], "output": 50.0 }
+        },
+        {
+          "name": "benefit_cost_ratio",
+          "signature": "fn benefit_cost_ratio(total_benefit: f64, total_cost: f64) -> Option<f64>",
+          "formula": "total_benefit / total_cost",
+          "returns_none_when": "total_cost == 0.0",
+          "example": { "input": [450000.0, 300000.0], "output": 1.5 }
+        }
+      ]
+    },
+    {
+      "name": "re_aim_framework",
+      "path": "src/re_aim_framework.rs",
+      "spec": "spec/re-aim-framework.md",
+      "upstream_topic": false,
+      "summary": "The RE-AIM framework evaluates a digital intervention across five dimensions: Reach, Effectiveness, Adoption, Implementation, and Maintenance.",
+      "functions": [
+        {
+          "name": "reach_rate",
+          "signature": "fn reach_rate(participants: f64, eligible: f64) -> Option<f64>",
+          "formula": "participants / eligible * 100",
+          "returns_none_when": "eligible == 0.0",
+          "example": { "input": [2400.0, 6000.0], "output": 40.0 }
+        },
+        {
+          "name": "adoption_rate",
+          "signature": "fn adoption_rate(adopting_settings: f64, invited_settings: f64) -> Option<f64>",
+          "formula": "adopting_settings / invited_settings * 100",
+          "returns_none_when": "invited_settings == 0.0",
+          "example": { "input": [18.0, 30.0], "output": 60.0 }
+        },
+        {
+          "name": "implementation_fidelity_rate",
+          "signature": "fn implementation_fidelity_rate(delivered_as_intended: f64, planned: f64) -> Option<f64>",
+          "formula": "delivered_as_intended / planned * 100",
+          "returns_none_when": "planned == 0.0",
+          "example": { "input": [1350.0, 1500.0], "output": 90.0 }
+        },
+        {
+          "name": "maintenance_rate",
+          "signature": "fn maintenance_rate(still_active: f64, initial_participants: f64) -> Option<f64>",
+          "formula": "still_active / initial_participants * 100",
+          "returns_none_when": "initial_participants == 0.0",
+          "example": { "input": [1080.0, 2400.0], "output": 45.0 }
+        }
+      ]
+    },
+    {
+      "name": "time_to_intervention",
+      "path": "src/time_to_intervention.rs",
+      "spec": "spec/time-to-intervention.md",
+      "upstream_topic": false,
+      "summary": "Time to intervention is the elapsed time between an automated health alert and a clinical team's first response, and the share of alerts answered within a target time.",
+      "functions": [
+        {
+          "name": "elapsed_minutes",
+          "signature": "fn elapsed_minutes(alert_minute: f64, intervention_minute: f64) -> f64",
+          "formula": "intervention_minute - alert_minute",
+          "returns_none_when": "never — there is no denominator",
+          "example": { "input": [100.0, 118.0], "output": 18.0 }
+        },
+        {
+          "name": "within_target_rate",
+          "signature": "fn within_target_rate(within_target: f64, alerts: f64) -> Option<f64>",
+          "formula": "within_target / alerts * 100",
+          "returns_none_when": "alerts == 0.0",
+          "example": { "input": [720.0, 800.0], "output": 90.0 }
+        },
+        {
+          "name": "percentile",
+          "signature": "fn percentile(response_times: &[f64], p: f64) -> Option<f64>",
+          "formula": "delegates to crate-internal percentile (linear interpolation, total_cmp sort)",
+          "returns_none_when": "response_times is empty",
+          "example": { "input": {"response_times": [5.0, 10.0, 15.0, 20.0, 25.0], "p": 50.0}, "output": 15.0 }
+        }
+      ]
+    },
+    {
+      "name": "system_usability_scale",
+      "path": "src/system_usability_scale.rs",
+      "spec": "spec/system-usability-scale.md",
+      "upstream_topic": false,
+      "summary": "The System Usability Scale (SUS) is a standardised 10-item questionnaire scored 0 to 100 (not a percentage; about 68 is the commonly cited average).",
+      "functions": [
+        {
+          "name": "sus_score",
+          "signature": "fn sus_score(responses: [f64; 10]) -> f64",
+          "formula": "sum(odd items: response - 1, even items: 5 - response) * 2.5",
+          "returns_none_when": "never — there is no denominator",
+          "example": { "input": [5.0, 1.0, 5.0, 1.0, 4.0, 2.0, 5.0, 1.0, 4.0, 2.0], "output": 90.0 }
+        },
+        {
+          "name": "mean_sus_score",
+          "signature": "fn mean_sus_score(total_scores: f64, respondents: f64) -> Option<f64>",
+          "formula": "total_scores / respondents",
+          "returns_none_when": "respondents == 0.0",
+          "example": { "input": [4080.0, 60.0], "output": 68.0 }
+        }
+      ]
+    },
+    {
+      "name": "bed_day_cost_avoidance",
+      "path": "src/bed_day_cost_avoidance.rs",
+      "spec": "spec/bed-day-cost-avoidance.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Bed-day cost avoidance puts a currency amount on virtual ward bed days: the cost of the hospital bed days saved by shifting recovery to a virtual ward, netted against the virtual ward's own operating cost.",
+      "functions": [
+        {
+          "name": "bed_day_cost_avoided",
+          "signature": "fn bed_day_cost_avoided(bed_days_saved: u32, cost_per_bed_day: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_per_bed_day * bed_days_saved",
+          "returns_err_when": "MoneyError::Overflow if the multiplication overflows `cost_per_bed_day`'s underlying decimal representation",
+          "example": {
+            "input": {"bed_days_saved": 300, "cost_per_bed_day": {"major_units": 500, "currency": "USD"}},
+            "output": {"major_units": 150000, "currency": "USD"}
+          }
+        },
+        {
+          "name": "net_savings",
+          "signature": "fn net_savings(cost_avoided: Money<'static, iso::Currency>, virtual_ward_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_avoided - virtual_ward_cost",
+          "returns_err_when": "MoneyError::CurrencyMismatch if `cost_avoided` and `virtual_ward_cost` are not denominated in the same currency",
+          "example": {
+            "input": {"cost_avoided": {"major_units": 150000, "currency": "USD"}, "virtual_ward_cost": {"major_units": 60000, "currency": "USD"}},
+            "output": {"major_units": 90000, "currency": "USD"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "ed_diversion_cost_avoidance",
+      "path": "src/ed_diversion_cost_avoidance.rs",
+      "spec": "spec/ed-diversion-cost-avoidance.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "ED diversion cost avoidance puts a currency amount on ED diversion rate: the cost of the emergency department visits safely avoided by virtual triage, netted against the triage service's own operating cost.",
+      "functions": [
+        {
+          "name": "cost_avoided",
+          "signature": "fn cost_avoided(safely_diverted_visits: u32, avoided_cost_per_visit: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "avoided_cost_per_visit * safely_diverted_visits",
+          "returns_err_when": "MoneyError::Overflow if the multiplication overflows `avoided_cost_per_visit`'s underlying decimal representation",
+          "example": {
+            "input": {"safely_diverted_visits": 1150, "avoided_cost_per_visit": {"major_units": 800, "currency": "USD"}},
+            "output": {"major_units": 920000, "currency": "USD"}
+          }
+        },
+        {
+          "name": "net_savings",
+          "signature": "fn net_savings(cost_avoided: Money<'static, iso::Currency>, triage_service_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "cost_avoided - triage_service_cost",
+          "returns_err_when": "MoneyError::CurrencyMismatch if `cost_avoided` and `triage_service_cost` are not denominated in the same currency",
+          "example": {
+            "input": {"cost_avoided": {"major_units": 920000, "currency": "USD"}, "triage_service_cost": {"major_units": 120000, "currency": "USD"}},
+            "output": {"major_units": 800000, "currency": "USD"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "episode_cost_reduction",
+      "path": "src/episode_cost_reduction.rs",
+      "spec": "spec/episode-cost-reduction.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Episode cost reduction measures the cost per episode of care — a complete course of treatment for a condition — and the total saving when a digital pathway lowers it against a historical baseline cohort.",
+      "functions": [
+        {
+          "name": "cost_per_episode",
+          "signature": "fn cost_per_episode(total_cost: Money<'static, iso::Currency>, episodes: u32) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "total_cost / episodes",
+          "returns_err_when": "MoneyError::DivisionByZero if `episodes` is zero, or MoneyError::Overflow if the division overflows",
+          "example": {
+            "input": {"total_cost": {"major_units": 1800000, "currency": "USD"}, "episodes": 2000},
+            "output": {"major_units": 900, "currency": "USD"}
+          }
+        },
+        {
+          "name": "total_episode_savings",
+          "signature": "fn total_episode_savings(baseline_cost_per_episode: Money<'static, iso::Currency>, current_cost_per_episode: Money<'static, iso::Currency>, episodes: u32) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "(baseline_cost_per_episode - current_cost_per_episode) * episodes",
+          "returns_err_when": "MoneyError::CurrencyMismatch if the two costs are not denominated in the same currency, or MoneyError::Overflow if the multiplication overflows",
+          "example": {
+            "input": {"baseline_cost_per_episode": {"major_units": 1000, "currency": "USD"}, "current_cost_per_episode": {"major_units": 900, "currency": "USD"}, "episodes": 2000},
+            "output": {"major_units": 200000, "currency": "USD"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "platform_investment_cost",
+      "path": "src/platform_investment_cost.rs",
+      "spec": "spec/platform-investment-cost.md",
+      "upstream_topic": false,
+      "numeric_type": "money",
+      "summary": "Platform investment cost is the full cost side of a return on investment calculation: the licensing, hardware deployment, and staffing costs of a digital health platform summed as currency-safe `Money`, and the net benefit once quantified benefit is set against them.",
+      "functions": [
+        {
+          "name": "total_platform_cost",
+          "signature": "fn total_platform_cost(licensing_cost: Money<'static, iso::Currency>, hardware_cost: Money<'static, iso::Currency>, staffing_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "licensing_cost + hardware_cost + staffing_cost",
+          "returns_err_when": "MoneyError::CurrencyMismatch if the three costs are not all denominated in the same currency, or MoneyError::Overflow if the sum overflows",
+          "example": {
+            "input": {"licensing_cost": {"major_units": 120000, "currency": "USD"}, "hardware_cost": {"major_units": 80000, "currency": "USD"}, "staffing_cost": {"major_units": 100000, "currency": "USD"}},
+            "output": {"major_units": 300000, "currency": "USD"}
+          }
+        },
+        {
+          "name": "net_benefit",
+          "signature": "fn net_benefit(total_benefit: Money<'static, iso::Currency>, total_cost: Money<'static, iso::Currency>) -> Result<Money<'static, iso::Currency>, MoneyError>",
+          "formula": "total_benefit - total_cost",
+          "returns_err_when": "MoneyError::CurrencyMismatch if `total_benefit` and `total_cost` are not denominated in the same currency",
+          "example": {
+            "input": {"total_benefit": {"major_units": 450000, "currency": "USD"}, "total_cost": {"major_units": 300000, "currency": "USD"}},
+            "output": {"major_units": 150000, "currency": "USD"}
           }
         }
       ]

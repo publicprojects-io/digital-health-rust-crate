@@ -6,13 +6,13 @@ Instructions for any AI coding agent working in this repository. See
 ## What this crate is
 
 `digital-health` is a Rust crate of pure calculation functions for digital
-health KPIs — thirty modules under `src/`, one per metric topic. See
+health KPIs — fifty-five modules under `src/`, one per metric topic. See
 [`spec/README.md`](spec/README.md)'s file table for the authoritative,
 up-to-date list: its `Upstream topic` column says which five modules mirror
 a topic in the upstream [Digital Health
 Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
 project directly (each such module ends its rustdoc with a `Topic doc:`
-line to the upstream source) versus which twenty-five cover well-evidenced
+line to the upstream source) versus which fifty cover well-evidenced
 metrics not yet in that project (each ends with an `Independent topic:`
 line pointing back at its own `## Sources` section instead). Don't
 hard-code this count or list elsewhere in prose — it changes every time a

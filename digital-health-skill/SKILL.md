@@ -6,7 +6,7 @@ description: Compute digital health KPIs — patient portal adoption, telehealth
 # Digital Health Metrics
 
 `digital-health` (this repository) is a Rust crate: one module per metric,
-each a small set of pure functions. Most take and return `f64`; eight
+each a small set of pure functions. Most take and return `f64`; thirteen
 cost-and-revenue modules take `u32` counts and a
 [`rusty_money::Money`](https://docs.rs/rusty-money) amount instead (see
 "Reading the result" below for how the two differ). Full contracts live in
@@ -82,6 +82,61 @@ the right function and interpreting its result.
 | Currency amount of outstanding duplicate-record backlog | `backlog_cost` | `duplicate_record_remediation_cost` |
 | Currency amount of transcription cost avoided by CPOE | `transcription_cost_avoided` | `cpoe_cost_impact` |
 | Currency amount of verbal-order review cost incurred | `verbal_order_review_cost` | `cpoe_cost_impact` |
+| Net Promoter Score from promoter, detractor and respondent counts | `net_promoter_score` | `net_promoter_score` |
+| Share of invited patients who answered the survey | `survey_response_rate` | `net_promoter_score` |
+| Share of a population with connectivity or device access | `digital_access_rate` | `digital_access_rate` |
+| A subgroup's access relative to a reference group | `access_parity_ratio` | `digital_access_rate` |
+| Lifetime value relative to acquisition cost | `ltv_to_cac_ratio` | `patient_acquisition_efficiency` |
+| Total revenue relative to total marketing spend | `marketing_efficiency_ratio` | `patient_acquisition_efficiency` |
+| Share of triage decisions matching a clinician reference | `triage_accuracy_rate` | `triage_accuracy_rate` |
+| Share of triage decisions routed below the needed care level | `under_triage_rate` | `triage_accuracy_rate` |
+| 30-day readmission rate | `readmission_rate` | `readmission_rate` |
+| Relative fall in readmission rate against a baseline | `readmission_reduction` | `readmission_rate` |
+| Clinician EHR documentation minutes per encounter | `documentation_minutes_per_encounter` | `clinician_documentation_time` |
+| Relative fall in documentation time against a baseline | `documentation_time_reduction` | `clinician_documentation_time` |
+| Currency amount of fully loaded patient acquisition cost | `total_acquisition_cost` | `patient_acquisition_cost` |
+| Acquisition cost per new patient | `cost_per_new_patient` | `patient_acquisition_cost` |
+| The estimated A1c (eA1c) implied by a mean glucose reading, using the ADAG regression | `estimated_a1c` | `biometric_improvement` |
+| The biometric reduction: the relative fall from a baseline value to a current one, as a percentage of the baseline | `biometric_reduction` | `biometric_improvement` |
+| The target attainment rate: patients at their clinical target as a percentage of patients measured | `target_attainment_rate` | `biometric_improvement` |
+| The proportion of days covered (PDC): days a patient had medication on hand as a percentage of days in the measurement period | `proportion_of_days_covered` | `medication_adherence_rate` |
+| The adherent patient rate: patients whose PDC meets the adherence threshold, as a percentage of patients | `adherent_patient_rate` | `medication_adherence_rate` |
+| The unassisted completion rate: tasks completed without help as a percentage of tasks attempted | `unassisted_completion_rate` | `digital_literacy_rate` |
+| The assistance rate: tasks needing staff or family help as a percentage of tasks attempted | `assistance_rate` | `digital_literacy_rate` |
+| The device uptime rate: hours a device was operating as a percentage of hours it was expected to operate | `device_uptime_rate` | `device_health_rate` |
+| The data transmission success rate: transmissions received as a percentage of transmissions expected | `data_transmission_success_rate` | `device_health_rate` |
+| The resource saturation rate: samples with CPU or memory above a threshold as a percentage of all samples | `resource_saturation_rate` | `device_health_rate` |
+| The active week rate: enrolled weeks with meaningful activity as a percentage of all enrolled weeks | `active_week_rate` | `engagement_consistency_rate` |
+| The dropout rate: patients who stopped engaging as a percentage of patients enrolled | `dropout_rate` | `engagement_consistency_rate` |
+| The blood pressure control rate: patients with controlled blood pressure as a percentage of patients monitored | `blood_pressure_control_rate` | `biometric_stabilization` |
+| The time in range: readings within the target range as a percentage of readings taken | `time_in_range` | `biometric_stabilization` |
+| The bed days saved: patients multiplied by the conventional stay minus the actual hospital stay | `bed_days_saved` | `virtual_ward_bed_days` |
+| The bed-day reduction rate: the relative fall from baseline bed days to current bed days, as a percentage of the baseline | `bed_day_reduction_rate` | `virtual_ward_bed_days` |
+| The active user rate: users active in the period as a percentage of enrolled users | `active_user_rate` | `active_user_rate` |
+| The stickiness ratio: average daily active users as a percentage of monthly active users | `stickiness_ratio` | `active_user_rate` |
+| The day-60 retention rate: cohort users active at day 60 as a percentage of the cohort | `day_60_retention_rate` | `long_term_retention_rate` |
+| The day-90 retention rate: cohort users active at day 90 as a percentage of the cohort | `day_90_retention_rate` | `long_term_retention_rate` |
+| The ED diversion rate: contacts that avoided an ED visit as a percentage of triage contacts | `ed_diversion_rate` | `ed_diversion_rate` |
+| The safe diversion rate: diverted contacts with no ED return in the follow-up window, as a percentage of diverted contacts | `safe_diversion_rate` | `ed_diversion_rate` |
+| The return on investment: net benefit as a percentage of total cost | `roi_percent` | `return_on_investment` |
+| The benefit-cost ratio: total benefit divided by total cost | `benefit_cost_ratio` | `return_on_investment` |
+| The reach rate: participants as a percentage of the eligible population | `reach_rate` | `re_aim_framework` |
+| The adoption rate: settings that adopted the intervention as a percentage of settings invited | `adoption_rate` | `re_aim_framework` |
+| The implementation fidelity rate: components delivered as intended as a percentage of components planned | `implementation_fidelity_rate` | `re_aim_framework` |
+| The maintenance rate: participants still active at the follow-up point as a percentage of initial participants | `maintenance_rate` | `re_aim_framework` |
+| The cost avoided: bed days saved multiplied by the marginal cost of one bed day | `bed_day_cost_avoided` | `bed_day_cost_avoidance` |
+| The net savings: cost avoided minus the virtual ward's own operating cost for the period | `net_savings` | `bed_day_cost_avoidance` |
+| The cost avoided: safely diverted ED visits multiplied by the avoided cost of one visit | `cost_avoided` | `ed_diversion_cost_avoidance` |
+| The net savings: cost avoided minus the triage service's own operating cost for the period | `net_savings` | `ed_diversion_cost_avoidance` |
+| The cost per episode of care: total cost divided by the number of episodes | `cost_per_episode` | `episode_cost_reduction` |
+| The total episode savings: the per-episode cost reduction against baseline, multiplied by the number of episodes | `total_episode_savings` | `episode_cost_reduction` |
+| The total platform cost: licensing, hardware, and staffing costs summed | `total_platform_cost` | `platform_investment_cost` |
+| The net benefit: total quantified benefit minus total platform cost | `net_benefit` | `platform_investment_cost` |
+| Minutes from an automated alert to a clinician's first action | `elapsed_minutes` | `time_to_intervention` |
+| Share of alerts answered within the target time | `within_target_rate` | `time_to_intervention` |
+| Median or Nth-percentile time to intervention | `percentile` | `time_to_intervention` |
+| SUS score for one respondent's ten answers | `sus_score` | `system_usability_scale` |
+| Mean SUS score across respondents | `mean_sus_score` | `system_usability_scale` |
 
 ## Reading the result
 
@@ -102,18 +157,23 @@ match no_show_rate(180.0, 2_000.0) {
 }
 ```
 
-The eight cost-and-revenue modules (`no_show_lost_revenue`,
+The thirteen cost-and-revenue modules (`no_show_lost_revenue`,
 `remote_patient_monitoring_billing_revenue`, `telehealth_cost_avoidance`,
 `patient_self_scheduling_cost_savings`, `econsult_cost_avoidance`,
 `digital_intake_cost_savings`, `duplicate_record_remediation_cost`,
-`cpoe_cost_impact`) instead return
+`cpoe_cost_impact`, `patient_acquisition_cost`, `bed_day_cost_avoidance`,
+`ed_diversion_cost_avoidance`, `episode_cost_reduction`,
+`platform_investment_cost`) instead return
 `Result<Money<'static, iso::Currency>, rusty_money::MoneyError>` — each is a
-one-line call straight through to `rusty_money`'s own `Money::mul` or
-`Money::sub`, not a wrapper type. `Err` is not a zero-denominator condition
-here — there's no division — it's either a `CurrencyMismatch` (only possible
+one-line call straight through to `rusty_money`'s own `Money::mul`,
+`Money::sub`, or `Money::add`, not a wrapper type. `Err` is not a
+zero-denominator condition here — with one exception, below — it's either a `CurrencyMismatch` (only possible
 when subtracting two caller-supplied `Money` values, e.g.
 `net_revenue_impact` or a module's `net_savings`) or an `Overflow`. Each
-function's rustdoc `# Errors` section says which apply.
+function's rustdoc `# Errors` section says which apply. The exceptions are
+`patient_acquisition_cost::cost_per_new_patient` and
+`episode_cost_reduction::cost_per_episode`, which divide by a count and
+return `Err(MoneyError::DivisionByZero)` when it is zero.
 
 ```rust
 use rusty_money::{Money, iso};
@@ -172,6 +232,17 @@ match lost_revenue(180, revenue_per_appointment) {
   `verbal_order_review_cost` are not complementary and must not be netted
   against each other — one is avoided cost, the other is incurred cost, for
   different order types.
+- `net_promoter_score` ranges from -100 to +100, not 0 to 100, and
+  `access_parity_ratio`, `ltv_to_cac_ratio`, and `marketing_efficiency_ratio`
+  are plain ratios (3.0 means 3:1), not percentages — don't format them as
+  `%` or clamp them.
+- `estimated_a1c` is the ADAG regression estimate, not a laboratory `HbA1c`, and never returns `None`
+  (it has no denominator). `device_health_rate`'s missing transmissions are
+  a device signal first — rule out device failure before reading them as
+  patient non-adherence.
+- `roi_percent` and `benefit_cost_ratio` take plain `f64` amounts in one currency; `platform_investment_cost` builds the cost side as `Money`, but this crate
+  doesn't convert `Money` to `f64` — extract the amount yourself. `sus_score` is 0–100 but not a percentage, and `re_aim_framework` covers only the four
+  proportional RE-AIM dimensions: Effectiveness is measured with the outcome modules (`biometric_improvement`, `readmission_rate`).
 - Most of this crate's modules are not present in [Digital Health
   Metrics](https://github.com/digital-health-metrics/digital-health-metrics)
   and are sourced independently from general literature and standards
