@@ -10,13 +10,14 @@ Thanks for helping improve this project.
 
 ## Development
 
-```sh
-cargo fmt --all --check
-cargo clippy --workspace --all-targets --all-features -- -D warnings
-cargo test --workspace --all-features
-```
+Read [AGENTS.md](AGENTS.md) and [spec/README.md](spec/README.md) first: the `spec/` directory is the source of truth, and a change to a formula, signature, or `None`/`Err` condition updates the spec, the function in `src/`, its rustdoc, and its tests together. To add a metric, follow [docs/tutorials/adding-a-metric.md](docs/tutorials/adding-a-metric.md).
 
-Run these before opening a pull request.
+Run the same checks CI runs (format, clippy, tests, doctests, docs):
+
+```sh
+make ci                                     # runs bin/ci
+make test-minimum-supported-rust-version    # MSRV (1.98) and the next release
+```
 
 ## Code of conduct
 
@@ -24,4 +25,4 @@ Participation is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-By contributing, you agree that your contribution is offered under the terms in the terms in [LICENSE.md](LICENSE.md).
+By contributing, you agree that your contribution is offered under the terms in [LICENSE.md](LICENSE.md).
