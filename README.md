@@ -22,8 +22,10 @@ Add the dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-digital-health = "1.0"
+digital-health = "1.2"
 ```
+
+Minimum supported Rust version (MSRV): 1.98.
 
 ## Quickstart
 
