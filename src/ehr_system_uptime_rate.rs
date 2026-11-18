@@ -25,6 +25,14 @@
 //! scheduling change versus an infrastructure reliability investigation —
 //! so a blended downtime figure obscures which one is needed.
 //!
+//! ## Clinical context
+//!
+//! Every other digital metric assumes the record system is available. Planned
+//! and unplanned downtime need different fixes, so IT and clinical operations
+//! leads should report them separately and check the scope, such as dependent
+//! services. See also the repository's `docs/clinical-standards.md` for
+//! related standards.
+//!
 //! ## Worked example
 //!
 //! Over a measurement period of 40,000 minutes, an EHR system logs 200

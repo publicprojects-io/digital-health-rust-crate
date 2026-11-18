@@ -30,6 +30,17 @@
 //! it per demographic group and compare it with [digital access
 //! rate](crate::digital_access_rate).
 //!
+//! ## Clinical context
+//!
+//! Reach, Adoption, Implementation and Maintenance, which judge a programme
+//! on population impact rather than efficacy alone. A strong effect reaching
+//! few eligible patients has small impact. Misreading: reporting only
+//! Effectiveness, or using enrolled rather than eligible patients as the
+//! reach denominator.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A diabetes-prevention app is offered to 6,000 eligible patients and

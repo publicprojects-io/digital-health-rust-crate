@@ -28,6 +28,16 @@
 //! platform licence, technical support, training — that has to be netted
 //! out before the figure means anything for a budget decision.
 //!
+//! ## Clinical context
+//!
+//! Costs not incurred (patient travel, clinic overhead) when care is remote,
+//! net of the platform's own cost. Misreading: using one figure across
+//! specialties or geographies, or reporting avoided cost without netting
+//! platform cost.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [telehealth visit rate](crate::telehealth_visit_rate)'s

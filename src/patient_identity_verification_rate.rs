@@ -28,6 +28,17 @@
 //! with the process — that [patient portal adoption
 //! rate](crate::patient_portal_adoption_rate) warns can widen access gaps.
 //!
+//! ## Clinical context
+//!
+//! How many patients get through identity proofing to use digital services,
+//! plus how often they need extra steps. Low success can look like poor
+//! adoption when the fix is upstream. Misreading: treating verification
+//! failure as portal-adoption failure; step-up friction also falls on
+//! patients lacking a smartphone camera or familiarity.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A health system's patient portal processes 5,000 new-account identity

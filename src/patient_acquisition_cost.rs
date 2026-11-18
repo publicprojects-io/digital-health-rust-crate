@@ -23,6 +23,15 @@
 //! components, in one currency, gives the figure a growth decision should
 //! actually be made on.
 //!
+//! ## Clinical context
+//!
+//! The fully loaded cost of acquiring a patient. Misreading: leaving out
+//! components such as agency fees and intake labour, or counting patients who
+//! never complete onboarding.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! In a quarter a digital weight-management programme spends an

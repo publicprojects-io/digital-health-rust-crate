@@ -228,6 +228,11 @@ cargo doc --no-deps                        # denies missing_docs
   machine-readable summaries of the crate for LLM tooling.
 - [`docs/tutorials/`](docs/tutorials/) — a getting-started walkthrough and a
   guide to adding a new metric module.
+- [`docs/clinical-standards.md`](docs/clinical-standards.md) — crosswalk from
+  each metric module to related clinical, interoperability, and usability
+  standards.
+- [`docs/clinical-significance.md`](docs/clinical-significance.md) — plain-language
+  explanation of what each metric means clinically and how it is commonly misread.
 
 ## Citation
 

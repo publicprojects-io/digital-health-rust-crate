@@ -32,6 +32,15 @@
 //! rate](crate::patient_portal_adoption_rate) draws between registration and
 //! active use.
 //!
+//! ## Clinical context
+//!
+//! How many bookings patients make themselves, alongside how soon the offered
+//! slots are. High use only improves access if appointments are actually
+//! available. Misreading: counting staff-made bookings as self-scheduled.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [appointment no-show rate](crate::appointment_no_show_rate)'s

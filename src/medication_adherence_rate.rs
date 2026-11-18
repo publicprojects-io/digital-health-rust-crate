@@ -22,6 +22,16 @@
 //! standard used in quality programmes, and the 80% threshold turns it into
 //! a cohort-level rate that can be tracked and compared.
 //!
+//! ## Clinical context
+//!
+//! Proportion of days covered and the share of patients reaching the 80%
+//! threshold. Non-adherence is a large, preventable driver of poor outcomes
+//! and avoidable admissions. Misreading: treating a filled prescription as a
+//! taken dose; it is a supply proxy.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A patient has medication on hand for 72 of the 90 days after a first

@@ -20,6 +20,16 @@
 //! cost case is built on. For the currency amount see
 //! [`bed_day_cost_avoidance`](crate::bed_day_cost_avoidance).
 //!
+//! ## Clinical context
+//!
+//! Hospital bed days freed by moving recovery into a virtual ward. Higher
+//! means more capacity released. Misreading: using an unmatched conventional
+//! stay length, which decides the whole result, or ignoring readmissions that
+//! make the saving illusory.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! 200 post-surgical patients would conventionally stay 6.0 days in

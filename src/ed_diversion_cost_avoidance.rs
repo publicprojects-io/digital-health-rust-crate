@@ -21,6 +21,13 @@
 //! diversion rate defines them, keeps the saving from being overstated by
 //! returns to the ED.
 //!
+//! ## Clinical context
+//!
+//! This is the money value of safely diverted emergency visits. Finance and
+//! urgent-care leads use it; count only safe diversions, and do not apply a
+//! high-acuity average ED cost to low-acuity visits. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [ED diversion rate](crate::ed_diversion_rate): 1,150 diverted

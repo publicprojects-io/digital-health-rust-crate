@@ -21,6 +21,14 @@
 //! completion avoid the bias of self-reported confidence, and computing
 //! them per demographic stratum shows who the service is quietly failing.
 //!
+//! ## Clinical context
+//!
+//! Measured by unassisted completion rather than self-reported confidence, a
+//! low value means a service is quietly failing some patients. Equity and
+//! service-design leads should read it by stratum, since the overall rate
+//! hides the largest gaps. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! Of 800 first telehealth visit attempts in a quarter, 640 were completed

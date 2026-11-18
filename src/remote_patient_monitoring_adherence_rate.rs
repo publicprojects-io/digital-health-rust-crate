@@ -32,6 +32,16 @@
 //! also an equity signal, the same pattern seen in [patient portal adoption
 //! rate](crate::patient_portal_adoption_rate).
 //!
+//! ## Clinical context
+//!
+//! Whether monitored patients send enough readings to make the monitoring
+//! clinically useful (and, for many payers, billable). Low adherence may be a
+//! device or access problem rather than reluctance. Misreading: counting any
+//! transmission, including unusable readings, as qualifying.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A cardiology remote monitoring program enrols 400 patients on a

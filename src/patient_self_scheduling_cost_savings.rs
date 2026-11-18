@@ -26,6 +26,15 @@
 //! cost avoidance](crate::telehealth_cost_avoidance) makes about its own
 //! platform cost.
 //!
+//! ## Clinical context
+//!
+//! Staff time not spent on booking calls, net of the scheduling platform's
+//! cost. Misreading: using one figure across visit types, or treating
+//! platform cost as purely variable.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [patient self-scheduling

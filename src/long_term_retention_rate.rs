@@ -21,6 +21,14 @@
 //! where most outcome trials find the benefit. A steep fall between day 30
 //! and day 60 is a distinct failure from poor onboarding.
 //!
+//! ## Clinical context
+//!
+//! Day-60 and day-90 retention is where most trials find the clinical benefit
+//! is decided. A steep fall between day 30 and day 60 is a different failure
+//! from poor onboarding; clinical and product leads should report only
+//! cohorts old enough to reach the horizon. See also the repository's
+//! `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A cohort of 1,000 patients enrols in a month. 540 are still active at

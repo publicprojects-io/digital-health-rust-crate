@@ -26,6 +26,14 @@
 //! rate](crate::clinical_alert_override_rate)'s own rustdoc warns against
 //! for the override side of the same picture.
 //!
+//! ## Clinical context
+//!
+//! Lower firing with a higher high-severity share is the direction alert-
+//! fatigue work aims for. Clinical informatics teams tune rules with it;
+//! compare it only between systems with similar rule sets and always
+//! alongside severity mix. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A hospital's CPOE system processes 10,000 medication orders in a month;

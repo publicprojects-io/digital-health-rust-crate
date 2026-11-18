@@ -23,6 +23,15 @@
 //! To build the cost side as currency-safe `Money`, see
 //! [`platform_investment_cost`](crate::platform_investment_cost).
 //!
+//! ## Clinical context
+//!
+//! ROI and benefit-cost ratio, the shorthand for "does it pay back?".
+//! Misreading: counting gross rather than attributable benefit, or comparing
+//! ROI over different periods.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A remote-monitoring platform delivers $450,000 of quantified benefit in

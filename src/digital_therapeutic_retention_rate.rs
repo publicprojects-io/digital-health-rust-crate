@@ -26,6 +26,13 @@
 //! only one checkpoint, or only an average "active users" figure, hides
 //! which of the two is actually happening.
 //!
+//! ## Clinical context
+//!
+//! A weak day-7 figure points to onboarding; a steep drop to day-30 points to
+//! engagement design. Product and clinical leads should report both
+//! checkpoints rather than one blended active-user figure. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A digital therapeutic for insomnia enrols 1,000 patients. 640 are still

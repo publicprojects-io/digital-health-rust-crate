@@ -25,6 +25,16 @@
 //! result is a ratio. To build a true CAC from its cost components as
 //! currency-safe `Money`, see [`patient_acquisition_cost`](crate::patient_acquisition_cost).
 //!
+//! ## Clinical context
+//!
+//! Whether spending to grow a patient base pays back (LTV-to-CAC and
+//! marketing efficiency). Higher is better, and a 3:1 LTV-to-CAC is a
+//! commonly cited baseline. Misreading: computing it from an undercounted
+//! acquisition cost, which flatters the ratio.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A digital weight-management programme estimates lifetime value of $1,500

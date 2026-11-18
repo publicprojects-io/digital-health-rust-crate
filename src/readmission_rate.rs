@@ -21,6 +21,17 @@
 //! the reduction as a *relative* change against a stated baseline makes a
 //! programme comparable across hospitals whose starting rates differ.
 //!
+//! ## Clinical context
+//!
+//! Unplanned return within 30 days of discharge, and its relative reduction
+//! against a baseline. It is the outcome payers most readily accept as proof
+//! that a programme improved care. Misreading: comparing unadjusted rates
+//! across hospitals; case mix drives readmission and this measure is not
+//! risk-adjusted.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A heart-failure remote-monitoring programme has 2,500 index discharges

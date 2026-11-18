@@ -33,6 +33,18 @@
 //! numerator, so a rising average adoption rate can mask a widening gap for
 //! the patients who often need contact with services the most.
 //!
+//! ## Clinical context
+//!
+//! Whether patients actually use the portal, as a funnel of registration,
+//! activation and active use. Higher at each later stage is better; a big
+//! drop between stages means accounts exist but go unused. Misreading:
+//! counting registration as adoption. Low or uneven adoption is also an
+//! equity signal, because older, lower-literacy or non-majority-language
+//! patients are less likely to be counted.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A primary care network serves 50,000 eligible patients. Of these, 32,000

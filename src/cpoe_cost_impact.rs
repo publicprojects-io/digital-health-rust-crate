@@ -27,6 +27,14 @@
 //! verbal orders are not merely a safety risk but also, independently, the
 //! more staff-intensive path.
 //!
+//! ## Clinical context
+//!
+//! This is the staffing cost case for electronic ordering: electronic orders
+//! avoid a transcription step, while verbal orders add a read-back and
+//! countersignature step. Finance and operational leads use it; it is a cost
+//! figure, not a measure of medication safety. See also the repository's
+//! `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [CPOE adoption rate](crate::cpoe_adoption_rate)'s worked

@@ -30,6 +30,16 @@
 //! policy and to check that remote care is not simply being substituted onto
 //! cases that need to be seen in person.
 //!
+//! ## Clinical context
+//!
+//! The share of care delivered remotely. Neither high nor low is inherently
+//! good: appropriateness varies by specialty, visit type and patient
+//! preference. Misreading: treating it as a number to maximise, or merging
+//! video and telephone, which are not interchangeable.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A community mental health service records 4,000 completed outpatient

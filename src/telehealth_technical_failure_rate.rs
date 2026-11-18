@@ -34,6 +34,17 @@
 //! than patient behaviour, and needing a different fix (device or bandwidth
 //! support, not a reminder).
 //!
+//! ## Clinical context
+//!
+//! How often a remote visit fails because of technology. Higher means
+//! friction and lost visits that a healthy-looking visit rate hides, and it
+//! tends to fall hardest on patients with older age, limited bandwidth or
+//! unfamiliar devices. Misreading: a platform that logs only the final
+//! successful attempt makes it invisible.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A clinic attempts 500 telehealth visits in a month. 35 fail to connect

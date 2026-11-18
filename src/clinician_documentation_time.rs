@@ -23,6 +23,14 @@
 //! documentation-heavy one, and a relative reduction shows whether a tool
 //! actually gave time back.
 //!
+//! ## Clinical context
+//!
+//! Time spent documenting in the EHR is tied to clinician burnout, so a
+//! reduction shows a tool gave time back. Clinical and operational leaders
+//! use it; check that the freed time is returned to clinicians and not simply
+//! filled with more patients. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A clinic's EHR audit logs record 240,000 minutes of clinician

@@ -27,6 +27,14 @@
 //! revenue](crate::remote_patient_monitoring_billing_revenue)'s "revenue at
 //! risk" plays for its own cohort split.
 //!
+//! ## Clinical context
+//!
+//! This is the cost of resolving duplicate records plus the backlog still to
+//! close, the more actionable figure for planning. Health-information
+//! managers and finance use it; resolution cost varies with record age and
+//! complexity. See also the repository's `docs/clinical-standards.md` for
+//! related standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [duplicate patient record

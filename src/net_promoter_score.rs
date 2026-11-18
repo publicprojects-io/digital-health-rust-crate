@@ -21,6 +21,16 @@
 //! Unlike the other rates in this crate it is *not* a share in `[0, 100]`:
 //! it ranges from −100 to +100, and a negative score is meaningful.
 //!
+//! ## Clinical context
+//!
+//! Patient or user willingness to recommend a service. Ranges from −100 to
+//! +100, and a negative score is meaningful. Misreading: ignoring the
+//! response rate; a high score from few responders mostly reflects who chose
+//! to answer.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A telehealth service sends its survey to 4,000 patients after a visit.
