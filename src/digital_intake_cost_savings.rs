@@ -26,6 +26,14 @@
 //! savings](crate::patient_self_scheduling_cost_savings) make about their
 //! own platform costs.
 //!
+//! ## Clinical context
+//!
+//! This is the manual data entry avoided by digital intake, net of the
+//! platform cost. Practice managers and finance staff use it; avoided-cost
+//! figures differ between new-patient and follow-up forms, so do not apply a
+//! single figure to both. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [digital intake form completion

@@ -20,6 +20,14 @@
 //! and equipment cost of the virtual ward, so the case isn't made on gross
 //! savings alone.
 //!
+//! ## Clinical context
+//!
+//! This is the money value of virtual-ward bed days saved, net of the ward's
+//! own cost. Finance and service leads use it; if a freed bed is simply
+//! refilled, the benefit is capacity rather than cash, so say which one you
+//! are reporting. See also the repository's `docs/clinical-standards.md` for
+//! related standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [virtual ward bed days](crate::virtual_ward_bed_days): 300

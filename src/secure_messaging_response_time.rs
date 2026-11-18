@@ -29,6 +29,17 @@
 //! practice's triage process doesn't separate urgent messages from routine
 //! ones before they queue.
 //!
+//! ## Clinical context
+//!
+//! How quickly clinicians answer patient portal messages. It is both a
+//! patient-experience measure and a proxy for in-box workload that spills
+//! into time outside scheduled hours. Slow response to time-sensitive
+//! messages is also a safety issue. Misreading: counting an auto-
+//! acknowledgement as the reply, or reporting only the mean.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A primary care practice logs the elapsed time, in hours, from message

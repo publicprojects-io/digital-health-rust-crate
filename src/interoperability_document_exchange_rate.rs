@@ -28,6 +28,14 @@
 //! interoperability is actually delivering; the parse rate is the number
 //! that says whether the data becomes usable, not just whether it arrived.
 //!
+//! ## Clinical context
+//!
+//! A document that arrives but fails to parse must be read manually rather
+//! than populating problem, medication and allergy lists. Informatics leads
+//! should look past transmission success to whether exchanged documents
+//! become usable data. See also the repository's `docs/clinical-standards.md`
+//! for related standards.
+//!
 //! ## Worked example
 //!
 //! A health information exchange processes 50,000 document exchange

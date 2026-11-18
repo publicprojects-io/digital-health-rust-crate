@@ -23,6 +23,14 @@
 //! [`triage_accuracy_rate`](crate::triage_accuracy_rate)'s under-triage
 //! measure.
 //!
+//! ## Clinical context
+//!
+//! This is the headline value claim for virtual triage and the one most prone
+//! to overstatement. Urgent-care leads should count only safely avoided
+//! visits and watch return visits, not every contact that was not sent to the
+//! ED. See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A virtual triage service handles 5,000 contacts. Reviewers judge 1,250

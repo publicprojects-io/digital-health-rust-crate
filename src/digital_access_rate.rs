@@ -22,6 +22,14 @@
 //! populations fall well behind. A parity ratio below 1.0 quantifies that
 //! gap. Note the ratio is a plain ratio, not a percentage.
 //!
+//! ## Clinical context
+//!
+//! A parity ratio below 1.0 means a subgroup is falling behind in access.
+//! Equity and service leads should read subgroup rates rather than the
+//! overall rate alone, and avoid treating a shared, data-capped phone as
+//! equal to home broadband. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! In a service area of 12,000 households, 8,400 have home broadband. The

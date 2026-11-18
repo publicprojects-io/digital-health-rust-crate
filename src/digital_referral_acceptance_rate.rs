@@ -28,6 +28,14 @@
 //! improvement is being driven by faster genuine accept/reject decisions or
 //! by a larger share of referrals being returned quickly instead.
 //!
+//! ## Clinical context
+//!
+//! This shows what triage actually decides: accepted, rejected or returned
+//! for information. Referral and access managers should read it with
+//! turnaround time, since a fast turnaround driven by quick returns is not an
+//! operational win. See also the repository's `docs/clinical-standards.md`
+//! for related standards.
+//!
 //! ## Worked example
 //!
 //! An e-referral system triages 1,000 referrals in a month. 780 are

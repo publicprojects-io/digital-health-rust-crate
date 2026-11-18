@@ -25,6 +25,13 @@
 //! device-level counterpart to [EHR system uptime
 //! rate](crate::ehr_system_uptime_rate).
 //!
+//! ## Clinical context
+//!
+//! A faulty device produces gaps that look like patient non-adherence, so low
+//! transmission success should send teams to check the device before the
+//! patient. Programme and device-support staff act on it. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A remote-monitoring hub fleet is expected to be up for 2,160 hours over

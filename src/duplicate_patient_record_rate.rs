@@ -33,6 +33,14 @@
 //! rate](crate::clinical_alert_override_rate) draws between an override
 //! occurring and an override being documented.
 //!
+//! ## Clinical context
+//!
+//! Each duplicate means a clinician may see only part of a patient's history,
+//! a direct safety risk that can spike after mergers or EHR migrations.
+//! Health-information and safety teams act on it; only merged duplicates
+//! reduce the risk, not merely identified ones. See also the repository's
+//! `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A hospital's master patient index holds 500,000 unique patient records.

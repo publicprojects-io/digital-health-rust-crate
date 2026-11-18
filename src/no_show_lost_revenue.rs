@@ -28,6 +28,15 @@
 //! appointment — the currency figure has to be calculated separately from
 //! the rate, not inferred from it.
 //!
+//! ## Clinical context
+//!
+//! The money behind the no-show rate. Rates alone do not show magnitude; 9%
+//! means something very different at $50 versus $500 per appointment.
+//! Misreading: using a blended revenue figure across appointment types.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [appointment no-show rate](crate::appointment_no_show_rate)'s

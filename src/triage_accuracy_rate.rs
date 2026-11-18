@@ -24,6 +24,17 @@
 //! signal visible, and lets a tool be tuned deliberately toward the safer
 //! error.
 //!
+//! ## Clinical context
+//!
+//! Whether a digital triage tool routes patients to the right care level.
+//! Over-triage wastes capacity; under-triage can delay care for someone who
+//! needed it urgently, so the under-triage rate carries the safety signal.
+//! Misreading: reporting overall accuracy alone, or reviewing a non-random
+//! sample.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A digital front door reviews 1,000 AI-assisted triage sessions against

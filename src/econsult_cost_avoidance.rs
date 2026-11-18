@@ -22,6 +22,14 @@
 //! budget decision is made on, netted against the cost of running the
 //! e-consult service itself.
 //!
+//! ## Clinical context
+//!
+//! This is the value of in-person referrals avoided through e-consults, net
+//! of running the service. Finance and referral leads use it; not every
+//! completed e-consult is an avoided referral, so count only those that were.
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [e-consult turnaround time](crate::econsult_turnaround_time)'s

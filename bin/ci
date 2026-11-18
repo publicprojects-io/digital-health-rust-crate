@@ -6,6 +6,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 export RUSTDOCFLAGS="${RUSTDOCFLAGS:--D warnings}"
 
+echo "==> module coverage"
+bin/check-modules
 echo "==> cargo fmt --check"
 cargo fmt --all -- --check
 echo "==> cargo clippy"
@@ -15,3 +17,5 @@ cargo test --all-targets --all-features
 cargo test --doc --all-features
 echo "==> cargo doc"
 cargo doc --no-deps --all-features
+echo "==> benchmarks compile"
+cargo bench --no-run

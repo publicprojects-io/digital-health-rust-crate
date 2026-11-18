@@ -28,6 +28,14 @@
 //! if turnaround time is only measured on referrals that pass through
 //! cleanly the first time.
 //!
+//! ## Clinical context
+//!
+//! Shorter and less variable is better, because this delay is process waste
+//! before any care starts. Access managers act on it; report the median and
+//! percentiles rather than the mean, and include referrals that needed
+//! rework. See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! An e-referral system's audit trail shows a median time from submission to

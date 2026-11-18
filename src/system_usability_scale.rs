@@ -25,6 +25,15 @@
 //! products, so a score is best read against that benchmark rather than as a
 //! percentage.
 //!
+//! ## Clinical context
+//!
+//! A short, widely used usability score (0–100) for patients or clinicians.
+//! About 68 is commonly cited as the cross-product average. Misreading:
+//! reading the score as a percentage; 68 is average, not "68% satisfied".
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! One respondent answers items 1–10 as 5, 1, 5, 1, 4, 2, 5, 1, 4, 2. The

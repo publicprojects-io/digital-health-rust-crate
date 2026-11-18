@@ -27,6 +27,16 @@
 //! adoption rate](crate::patient_portal_adoption_rate) raises about its own
 //! adoption figures.
 //!
+//! ## Clinical context
+//!
+//! The share of patients who complete patient-reported outcome measures. Low
+//! or skewed completion means the outcome data may come only from healthier,
+//! younger or more digitally engaged patients. Misreading: trusting a high
+//! overall rate without checking who is missing.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! An orthopaedic joint-replacement programme identifies 800 eligible

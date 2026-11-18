@@ -34,6 +34,14 @@
 //! the distribution across severity tiers, and whether clinicians document a
 //! reason when they override a high-severity alert.
 //!
+//! ## Clinical context
+//!
+//! A high override rate is the standard signal of alert fatigue but is not
+//! automatically unsafe, since many alerts are low value. Safety and
+//! informatics leads should watch the trend, the severity mix and whether
+//! high-severity overrides carry a documented reason. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A hospital's CPOE system fires 10,000 drug-drug interaction alerts in a

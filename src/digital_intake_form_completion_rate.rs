@@ -25,6 +25,14 @@
 //! two rates together separate "patients will use a digital form" from
 //! "the digital form actually removed work from the visit."
 //!
+//! ## Clinical context
+//!
+//! Forms finished before arrival shorten the visit and reduce front-desk
+//! work; a form finished in the waiting room does not. Front-desk and clinic
+//! leads act on it; an abandoned, partly completed form is not a completion.
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A clinic schedules 2,000 appointments in a month. 1,200 patients

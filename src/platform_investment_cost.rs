@@ -21,6 +21,15 @@
 //! Summing all three components in one currency, with a typed error on a
 //! currency mismatch, gives the figure a payback decision should rest on.
 //!
+//! ## Clinical context
+//!
+//! The fully loaded licensing, hardware and staffing cost a payback decision
+//! rests on. Misreading: leaving out staffing, usually the largest ongoing
+//! cost, or charging the whole hardware purchase to one year.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A remote-monitoring platform costs an illustrative $120,000.00 in

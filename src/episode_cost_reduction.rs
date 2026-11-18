@@ -19,6 +19,14 @@
 //! for volume, and multiplying the per-episode difference by episode count
 //! gives the programme-level saving.
 //!
+//! ## Clinical context
+//!
+//! Cost per episode of care against a baseline is the unit value-based
+//! contracts are written on. Finance and contracting leads should compare
+//! against a baseline with similar case mix and include the programme's own
+//! cost. See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A digital musculoskeletal programme's 2,000 episodes cost an

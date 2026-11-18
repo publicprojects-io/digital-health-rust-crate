@@ -21,6 +21,15 @@
 //! upstream of
 //! [`engagement_consistency_rate`](crate::engagement_consistency_rate).
 //!
+//! ## Clinical context
+//!
+//! A product with many monthly but few daily users is visited rather than
+//! used, so read the daily-to-monthly ratio alongside the raw counts. A
+//! higher ratio means the tool is part of routine use; a low one means
+//! occasional visits. Product and service leads act on it; do not count opens
+//! or logins as activity. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A care app has 8,000 enrolled patients, of whom 3,200 were active in the

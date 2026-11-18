@@ -28,6 +28,14 @@
 //! care visit's own timeline. Turnaround time is the number that decides
 //! whether that promise is being kept.
 //!
+//! ## Clinical context
+//!
+//! Asynchronous specialist advice helps primary care resolve questions
+//! without a full referral, but only if the reply arrives fast enough to be
+//! useful. Service leads should watch the median and upper percentiles, since
+//! a few long consults pull a mean upward. See also the repository's
+//! `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! An e-consult service logs specialist response times (in hours) for ten

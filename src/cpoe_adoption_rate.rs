@@ -35,6 +35,14 @@
 //! measure in this crate: none of them apply to an order that was never
 //! entered electronically.
 //!
+//! ## Clinical context
+//!
+//! A rising verbal-order share means more orders bypass every electronic
+//! safety check, which can hide medication risk behind a healthy override
+//! rate. Medication-safety and pharmacy leads act on it; high adoption alone
+//! is not sufficient evidence of safety. See also the repository's
+//! `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A hospital places 10,000 medication orders in a month: 9,400 via CPOE,

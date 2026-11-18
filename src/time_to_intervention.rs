@@ -25,6 +25,16 @@
 //! and pairs with [`clinical_alert_firing_rate`](crate::clinical_alert_firing_rate)
 //! for the alert-fatigue picture.
 //!
+//! ## Clinical context
+//!
+//! How fast a clinical team acts on an automated alert. An alert nobody acts
+//! on quickly has no clinical value, and the slow tail is where harm happens.
+//! Misreading: counting acknowledgement as intervention, or reporting only
+//! the mean.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A remote-monitoring service raises an alert at minute 100 of a shift and

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Verify every src module has a spec, is listed in the AI-discovery files,
+# and is declared in lib.rs. Usage: bin/check-modules
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+fail=0
+for f in src/*.rs; do
+  mod=$(basename "$f" .rs)
+  case "$mod" in lib|internal) continue ;; esac
+  spec="spec/${mod//_/-}.md"
+  [ -f "$spec" ] || { echo "missing spec: $spec"; fail=1; }
+  grep -q "pub mod $mod;" src/lib.rs || { echo "not in lib.rs: $mod"; fail=1; }
+  for doc in README.md llms.txt llms.json digital-health-skill/SKILL.md spec/README.md docs/clinical-standards.md docs/clinical-significance.md; do
+    grep -q "$mod\|${mod//_/-}" "$doc" || { echo "$mod missing from $doc"; fail=1; }
+  done
+  grep -q "#\[cfg(test)\]" "$f" || { echo "no unit tests: $f"; fail=1; }
+done
+exit $fail

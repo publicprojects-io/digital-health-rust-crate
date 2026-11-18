@@ -28,6 +28,17 @@
 //! discharge reconciliation error follows the patient home — so the two
 //! rates are tracked separately rather than blended into one.
 //!
+//! ## Clinical context
+//!
+//! Whether medication lists are reconciled at admission and discharge, the
+//! points where lists most often drift from what the patient actually takes.
+//! Higher completion is safer. Misreading: counting a started-but-unsigned
+//! reconciliation as complete, or blending admission and discharge, which
+//! have different risks.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! A hospital admits 1,000 patients in a month; reconciliation is completed

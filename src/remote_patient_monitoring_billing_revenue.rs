@@ -27,6 +27,16 @@
 //! this period, which is what an adherence-improvement intervention is
 //! justified against.
 //!
+//! ## Clinical context
+//!
+//! Revenue earned versus at risk from patients who did not clear the billing
+//! threshold. "Revenue at risk" is what an adherence intervention is
+//! justified against. Misreading: assuming one reimbursement figure covers
+//! every billed code.
+//!
+//! See also the repository's `docs/clinical-standards.md` for related
+//! standards.
+//!
 //! ## Worked example
 //!
 //! Continuing [remote patient monitoring adherence

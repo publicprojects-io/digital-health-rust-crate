@@ -31,6 +31,14 @@
 //! reminders and easy digital rescheduling are consistently among the most
 //! effective, low-cost interventions available.
 //!
+//! ## Clinical context
+//!
+//! A lower rate means shorter waits and less wasted clinician time; a higher
+//! one means lost capacity. Clinic managers act on it, but no-shows track
+//! deprivation, transport and multimorbidity, so read a high rate as a signal
+//! about access before treating it as patient behaviour. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A community clinic schedules 2,000 appointments in a month. Of these, 140

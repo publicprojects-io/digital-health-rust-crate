@@ -23,6 +23,14 @@
 //! [`biometric_improvement`](crate::biometric_improvement)'s change-from-
 //! baseline view.
 //!
+//! ## Clinical context
+//!
+//! A single reading is noisy; sustained control across a cohort, such as
+//! blood pressure in range or glucose time in range, is what relates to fewer
+//! complications. Clinicians act on it, so state how patients with no recent
+//! readings are handled. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A hypertension programme monitors 900 patients with cellular cuffs and

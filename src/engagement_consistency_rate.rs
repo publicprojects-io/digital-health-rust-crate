@@ -21,6 +21,13 @@
 //! and day-30 checkpoints in [digital therapeutic retention
 //! rate](crate::digital_therapeutic_retention_rate) with a continuous view.
 //!
+//! ## Clinical context
+//!
+//! Sustained week-to-week interaction is a stronger indicator of benefit than
+//! a login count. Programme leads use it to see how many patients keep going
+//! and how many drop out; report dropouts as well as survivors. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A weight-management cohort has 480 enrolled patient-weeks in a month, of

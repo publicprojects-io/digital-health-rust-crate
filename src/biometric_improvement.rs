@@ -24,6 +24,14 @@
 //! it actually reached — an average can improve while few patients hit
 //! their target.
 //!
+//! ## Clinical context
+//!
+//! The relative fall in a measure such as `HbA1c` or BMI shows the size of the
+//! average effect, and the share reaching target shows how many patients it
+//! reached. Clinical leads should read the two together rather than quoting
+//! an average change alone. See also the repository's `docs/clinical-
+//! standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! A diabetes programme's CGM users have a mean glucose of 154.2 mg/dL. The

@@ -37,6 +37,14 @@
 //! require different responses, which is why segmenting by reason matters
 //! more than the headline number.
 //!
+//! ## Clinical context
+//!
+//! Pharmacy call-backs catch errors a clean network transmission cannot.
+//! Rising call-backs from data-mapping problems are a system-quality issue,
+//! while those from formulary or prior authorisation are administrative;
+//! pharmacy and informatics leads should separate them. See also the
+//! repository's `docs/clinical-standards.md` for related standards.
+//!
 //! ## Worked example
 //!
 //! An outpatient clinic transmits 5,000 e-prescriptions electronically in a
