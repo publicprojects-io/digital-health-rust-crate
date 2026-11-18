@@ -17,7 +17,7 @@ Run the same checks CI runs (format, clippy, tests, doctests, docs):
 ```sh
 make ci                                     # runs bin/ci
 make test-minimum-supported-rust-version    # MSRV (1.98) and the next release
-make benchmarks                                # criterion benchmarks (report: target/criterion/)
+make benchmarks                             # criterion benchmarks (report: target/criterion/)
 make coverage                               # tarpaulin coverage (needs: cargo install cargo-tarpaulin)
 ```
 
