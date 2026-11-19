@@ -7,5 +7,5 @@ out = ["Stdout", "Html", "Xml"]
 output-dir = "target/coverage"
 # Benchmarks and test code don't count towards coverage.
 exclude-files = ["benches/*", "tests/*"]
-# Floor: every metric module is small and fully tested, so require high coverage.
-fail-under = 95
+# Floor: every metric module is small and fully tested, so require complete coverage.
+fail-under = 100
