@@ -48,7 +48,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Install cargo-tarpaulin
         run: cargo install cargo-tarpaulin --locked
-      - run: bin/coverage
+      - run: bin/test-coverage
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-report

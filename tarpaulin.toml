@@ -1,4 +1,4 @@
-# cargo tarpaulin reads this file. Run: bin/coverage
+# cargo tarpaulin reads this file. Run: bin/test-coverage
 [default]
 all-features = true
 # Unit tests, integration tests, and doctests (the worked examples).

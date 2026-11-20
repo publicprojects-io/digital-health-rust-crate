@@ -19,18 +19,18 @@ test:
 	bin/test
 
 ##
-# make test-minimum-supported-rust-version: test with the minimum supported Rust version
+# make ci-minimum-supported-rust-version: test with the minimum supported Rust version
 ##
-.PHONY: test-minimum-supported-rust-version
-test-minimum-supported-rust-version:
-	bin/test-minimum-supported-rust-version
+.PHONY: ci-minimum-supported-rust-version
+ci-minimum-supported-rust-version:
+	bin/make-ci-minimum-supported-rust-version
 
 ##
-# make benchmarks: run bin/benchmarks to generate code benchmarks with criterion.
+# make test-benchmarks: run bin/test-benchmarks to generate code benchmarks with criterion.
 ##
-.PHONY: benchmarks
-benchmarks:
-	bin/benchmarks
+.PHONY: test-benchmarks
+test-benchmarks:
+	bin/test-benchmarks
 
 ##
 # make ci: run bin/ci to do continuous integration.
@@ -40,8 +40,8 @@ ci:
 	bin/ci
 
 ##
-# make coverage: : run bin/coverage to generate code coverage analysis with tarpaulin.
+# make test-coverage: run bin/test-coverage to generate code coverage analysis with tarpaulin.
 ##
-.PHONY: coverage
-coverage:
-	bin/coverage
+.PHONY: test-coverage
+test-coverage:
+	bin/test-coverage
