@@ -1,6 +1,6 @@
 {
   "name": "digital-health",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Digital health metrics models, structs, calculations, and examples.",
   "language": "rust",
   "edition": "2024",
